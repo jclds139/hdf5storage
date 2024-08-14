@@ -39,7 +39,7 @@ str_unicode = str_ascii + "".join([chr(500 + i) for i in range(1000)])
 
 def test_numpy_str_ascii_to_uint16_back():
     for _ in range(100):
-        data = np.unicode_(str_ascii)
+        data = np.str_(str_ascii)
         intermed = utils.convert_numpy_str_to_uint16(data)
         out = utils.convert_to_numpy_str(intermed)[0]
         assert out.tobytes() == data.tobytes()
@@ -48,7 +48,7 @@ def test_numpy_str_ascii_to_uint16_back():
 
 def test_numpy_str_someunicode_to_uint16_back():
     for _ in range(100):
-        data = np.unicode_(str_unicode)
+        data = np.str_(str_unicode)
         intermed = utils.convert_numpy_str_to_uint16(data)
         out = utils.convert_to_numpy_str(intermed)[0]
         assert out.tobytes() == data.tobytes()
@@ -57,7 +57,7 @@ def test_numpy_str_someunicode_to_uint16_back():
 
 def test_numpy_str_ascii_to_uint32_back():
     for _ in range(100):
-        data = np.unicode_(str_ascii)
+        data = np.str_(str_ascii)
         intermed = utils.convert_numpy_str_to_uint32(data)
         out = utils.convert_to_numpy_str(intermed)[0]
         assert intermed.tobytes() == data.tobytes()
@@ -67,7 +67,7 @@ def test_numpy_str_ascii_to_uint32_back():
 
 def test_numpy_str_someunicode_to_uint32_back():
     for _ in range(100):
-        data = np.unicode_(str_unicode)
+        data = np.str_(str_unicode)
         intermed = utils.convert_numpy_str_to_uint32(data)
         out = utils.convert_to_numpy_str(intermed)[0]
         assert intermed.tobytes() == data.tobytes()

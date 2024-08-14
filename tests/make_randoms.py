@@ -158,7 +158,7 @@ def random_numpy(
                 chars = random_str_some_unicode(length)
             else:
                 chars = random_str_ascii(length)
-            data[index] = np.unicode_(chars)
+            data[index] = np.str_(chars)
         return data
     if dtype == "object":
         if object_element_dtypes is None:
@@ -201,7 +201,7 @@ def random_numpy_scalar(dtype, object_element_dtypes=None):
     if dtype == "S":
         return np.bytes_(random_bytes(random.randint(1, max_string_length)))
     if dtype == "U":
-        return np.unicode_(random_str_ascii(random.randint(1, max_string_length)))
+        return np.str_(random_str_ascii(random.randint(1, max_string_length)))
     return random_numpy(
         (),
         dtype,

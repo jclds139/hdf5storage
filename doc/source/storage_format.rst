@@ -403,7 +403,7 @@ each key-value pair as its own Dataset if all the keys are string like
 and either are Python 3.x ``str`` or Python 2.x ``unicode`` or can be
 converted to those. A key is string like if it is a Python 3.x ``'str``
 or ``'bytes'``, a Python 2.x ``'unicode'`` or ``'str'``, a
-``np.unicode_``, or a ``np.bytes_``.
+``np.str_``, or a ``np.bytes_``.
 
 This Attribute stores what their original types are. Otherwise, the
 exact type would be lost in the conversion to Dataset names. The
@@ -416,7 +416,7 @@ Character  Type
 =========  ============================================
 ``b't'``   Python 3.x ``str`` or Python 2.x ``unicode``
 ``b'b'``   Python 3.x ``bytes`` or Python 2.x ``str``
-``b'U'``   ``np.unicode_``
+``b'U'``   ``np.str_``
 ``b'S'``   ``np.bytes_``
 =========  ============================================
 
@@ -494,7 +494,7 @@ are stored either with each key-value as their own Dataset or as two
 Datasets, one for keys and one for values. The former is used if all
 keys are string like. Keys are converted to ``str``. Otherwise, the
 latter format is used. A key is string like if it is a ``'str``, a
-``'bytes'``, a ``np.unicode_``, or a ``np.bytes_`` and it an be
+``'bytes'``, a ``np.str_``, or a ``np.bytes_`` and it an be
 converted successfully to ``str``.
 
 When they can't be stored with each key-value pair as their own Dataset,

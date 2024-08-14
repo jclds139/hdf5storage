@@ -145,7 +145,7 @@ def assert_equal_none_format(a, b, options=None):
             tp_str: lambda x: x,
             tp_bytes: lambda x: x.decode("UTF-8"),
             np.bytes_: lambda x: bytes(x).decode("UTF-8"),
-            np.unicode_: lambda x: str(x),
+            np.str_: lambda x: str(x),
         }
 
         def tp_conv(x):
@@ -258,7 +258,7 @@ def assert_equal_none_format(a, b, options=None):
         elif isinstance(b, (bytes, bytearray)):
             assert a == np.bytes_(b)
         elif isinstance(b, str):
-            assert_equal_none_format(a, np.unicode_(b), options)
+            assert_equal_none_format(a, np.str_(b), options)
         elif type(b) == int:
             if b > 2**63 or b < -(2**63 - 1):
                 assert_equal_none_format(a, np.bytes_(b), options)
@@ -365,7 +365,7 @@ def assert_equal_matlab_format(a, b, options=None):
     # numpy.bytes_ string has to have the same thing done, but then it
     # needs to be converted up to UTF-32 and to numpy.str_ through
     # uint32. Big longs and ints end up getting converted to UTF-16
-    # uint16's when written and read back as UTF-32 numpy.unicode_.
+    # uint16's when written and read back as UTF-32 numpy.str_.
     #
     # In all cases, we expect things to be at least two dimensional
     # arrays.
@@ -383,7 +383,7 @@ def assert_equal_matlab_format(a, b, options=None):
             tp_str: lambda x: x,
             tp_bytes: lambda x: x.decode("UTF-8"),
             np.bytes_: lambda x: bytes(x).decode("UTF-8"),
-            np.unicode_: lambda x: str(x),
+            np.str_: lambda x: str(x),
         }
 
         def tp_conv(x):
@@ -498,15 +498,15 @@ def assert_equal_matlab_format(a, b, options=None):
                 assert_equal(a, np.zeros(shape=(1, 0), dtype="U"), options)
             elif isinstance(b, (bytes, bytearray)):
                 try:
-                    c = np.unicode_(b.decode("ASCII"))
+                    c = np.str_(b.decode("ASCII"))
                 except:
                     c = np.bytes_(b)
                 assert_equal(a, np.atleast_2d(c), options)
             else:
-                assert_equal(a, np.atleast_2d(np.unicode_(b)), options)
+                assert_equal(a, np.atleast_2d(np.str_(b)), options)
         elif type(b) == int:
             if b > 2**63 or b < -(2**63 - 1):
-                assert_equal(a, np.atleast_2d(np.unicode_(b)), options)
+                assert_equal(a, np.atleast_2d(np.str_(b)), options)
             else:
                 assert_equal(a, np.atleast_2d(np.int64(b)), options)
         else:

@@ -38,10 +38,10 @@ import hdf5storage
 # convert_numpy_str_to_utf16 option is set.
 #
 # * str
-# * numpy.unicode_ scalars
+# * numpy.str_ scalars
 
 
-@pytest.mark.parametrize("tp", [str, np.unicode_])
+@pytest.mark.parametrize("tp", [str, np.str_])
 def test_conv_utf16(tp):
     name = "/a"
     data = tp("abcdefghijklmnopqrstuvwxyz")

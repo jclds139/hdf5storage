@@ -686,9 +686,9 @@ def convert_dtype_to_str(dtype: np.dtype) -> str:
 
 
 def convert_numpy_str_to_uint16(data: Union[np.str_, np.ndarray]) -> np.ndarray:
-    r"""Converts a ``numpy.unicode_`` to UTF-16 in numpy.uint16 form.
+    r"""Converts a ``numpy.str_`` to UTF-16 in numpy.uint16 form.
 
-    Convert a ``numpy.unicode_`` or an array of them (they are UTF-32
+    Convert a ``numpy.str_`` or an array of them (they are UTF-32
     strings) to UTF-16 in the equivalent array of ``numpy.uint16``. The
     conversion will throw an exception if any characters cannot be
     converted to UTF-16. Strings are expanded along rows (across columns)
@@ -740,9 +740,9 @@ def convert_numpy_str_to_uint16(data: Union[np.str_, np.ndarray]) -> np.ndarray:
 
 
 def convert_numpy_str_to_uint32(data: Union[np.str_, np.ndarray]) -> np.ndarray:
-    r"""Converts ``numpy.unicode_`` to its numpy.uint32 representation.
+    r"""Converts ``numpy.str_`` to its numpy.uint32 representation.
 
-    Convert a ``numpy.unicode_`` or an array of them (they are UTF-32
+    Convert a ``numpy.str_`` or an array of them (they are UTF-32
     strings) into the equivalent array of ``numpy.uint32`` that is byte
     for byte identical. Strings are expanded along rows (across columns)
     so a 2x3x4 array of 10 element strings will get turned into a 2x3x40
@@ -793,7 +793,7 @@ def convert_to_str(
     r"""Decodes data to the ``str`` type.
 
     Decodes `data` to a ``str``. Unsigned integers, Python ``bytes``,
-    and Numpy strings (``numpy.unicode_`` and ``numpy.bytes_``) are
+    and Numpy strings (``numpy.str_`` and ``numpy.bytes_``) are
     supported. Python 3.x ``bytes`` and ``numpy.bytes_`` are assumed to
     be encoded in UTF-8.
 
@@ -832,7 +832,7 @@ def convert_to_str(
 
     if isinstance(
         data,
-        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.unicode_),
+        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.str_),
     ):
         if data.dtype.name == "uint8":
             return data.tobytes().decode("UTF-8")
@@ -868,14 +868,14 @@ def convert_to_numpy_str(
     ],
     length: Optional[int] = None,
 ) -> Any:
-    r"""Decodes data to Numpy unicode string (``numpy.unicode_``).
+    r"""Decodes data to Numpy unicode string (``numpy.str_``).
 
     Decodes `data` to Numpy unicode string (UTF-32), which is
-    ``numpy.unicode_``, or an array of them. If it can't be decoded, it
+    ``numpy.str_``, or an array of them. If it can't be decoded, it
     is returned as is. Unsigned integers, Python string types (``str``,
     ``bytes``), and ``numpy.bytes_`` are supported. If it is an array of
     ``numpy.bytes_``, an array of those all converted to
-    ``numpy.unicode_`` is returned. ``bytes`` and ``numpy.bytes_`` are
+    ``numpy.str_`` is returned. ``bytes`` and ``numpy.bytes_`` are
     assumed to be encoded in UTF-8.
 
     For an array of unsigned integers, it may be desirable to make an
@@ -907,7 +907,7 @@ def convert_to_numpy_str(
     Returns
     -------
     s : numpy.unicode\_ or numpy.ndarray of numpy.unicode\_
-        The `data` decoded into a ``numpy.unicode_`` or a
+        The `data` decoded into a ``numpy.str_`` or a
         ``numpy.ndarray`` of them.
 
     Raises
@@ -919,21 +919,21 @@ def convert_to_numpy_str(
     --------
     convert_to_str
     convert_to_numpy_bytes
-    numpy.unicode_
+    numpy.str_
 
     """
     # The method of conversion depends on its type.
     if isinstance(
         data,
-        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.unicode_),
+        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.str_),
     ):
-        if data.dtype.type == np.unicode_:
+        if data.dtype.type == np.str_:
             # It is already an np.str_ or array of them, so nothing needs to
             # be done.
             return data
         if data.dtype.type == np.bytes_:
             if isinstance(data, np.bytes_):
-                return np.unicode_(data.decode("UTF-8"))
+                return np.str_(data.decode("UTF-8"))
             return np.char.encode(data, "UTF-32")  # type: ignore[arg-type]
         if isinstance(data, (np.uint8, np.uint16)):
             # They are single UTF-8 or UTF-16 scalars, which can be
@@ -1010,11 +1010,11 @@ def convert_to_numpy_str(
         raise TypeError("Not a type that can be converted to str.")
     if isinstance(data, str):
         # Easily converted through constructor.
-        return np.unicode_(data)
+        return np.str_(data)
     if isinstance(data, (bytes, bytearray)):
         # All of them can be decoded and then passed through the
         # constructor.
-        return np.unicode_(data.decode("UTF-8"))
+        return np.str_(data.decode("UTF-8"))
     raise TypeError("Not a type that can be converted to str.")
 
 
@@ -1036,7 +1036,7 @@ def convert_to_numpy_bytes(
     ``numpy.bytes_``, or an array of them in which case it will be ASCII
     encoded instead. If it can't be decoded, it is returned as
     is. Unsigned integers, Python string types (``str``, ``bytes``), and
-    ``numpy.unicode_`` (UTF-32) are supported.
+    ``numpy.str_`` (UTF-32) are supported.
 
     For an array of unsigned integers, it may be desirable to make an
     array with strings of some specified length as opposed to an array
@@ -1085,7 +1085,7 @@ def convert_to_numpy_bytes(
     # The method of conversion depends on its type.
     if isinstance(
         data,
-        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.unicode_),
+        (np.ndarray, np.uint8, np.uint16, np.uint32, np.bytes_, np.str_),
     ):
         if data.dtype.type == np.bytes_:
             # It is already an np.bytes_ or array of them, so nothing
@@ -1101,7 +1101,7 @@ def convert_to_numpy_bytes(
             # needs to be have the dtype essentially changed by having
             # its bytes read into ndarray.
             return np.ndarray(shape=(), dtype="S1", buffer=data.data)[()]
-        if isinstance(data, np.unicode_):
+        if isinstance(data, np.str_):
             return np.bytes_(data.encode("UTF-8"))
         if isinstance(data, np.ndarray) and data.dtype.char == "U":
             # We just need to convert it elementwise.
@@ -1347,7 +1347,7 @@ def convert_attribute_to_string(value: Any) -> Optional[str]:
         return value
     if isinstance(value, bytes):
         return value.decode()
-    if isinstance(value, np.unicode_):
+    if isinstance(value, np.str_):
         return str(value)
     if isinstance(value, np.bytes_):
         return value.decode()

@@ -617,7 +617,7 @@ def test_dict_like(fmt, tp):
         (fmt, tp, otp)
         for fmt in fmts
         for tp in dict_like
-        for otp in ("bytes", "numpy.bytes_", "numpy.unicode_", "int", "float")
+        for otp in ("bytes", "numpy.bytes_", "numpy.str_", "int", "float")
     },
 )
 def test_dict_like_other_type_key(fmt, tp, other_tp):
@@ -626,8 +626,8 @@ def test_dict_like_other_type_key(fmt, tp, other_tp):
     key_gen = random_str_some_unicode(max_dict_key_length)
     if other_tp == "numpy.bytes_":
         key = np.bytes_(key_gen.encode("UTF-8"))
-    elif other_tp == "numpy.unicode_":
-        key = np.unicode_(key_gen)
+    elif other_tp == "numpy.str_":
+        key = np.str_(key_gen)
     elif other_tp == "bytes":
         key = key_gen.encode("UTF-8")
     elif other_tp == "int":

@@ -531,17 +531,17 @@ class Options:
 
     @property
     def convert_numpy_str_to_utf16(self: "Options") -> bool:
-        """Whether or not to convert ``numpy.unicode_`` to UTF-16.
+        """Whether or not to convert ``numpy.str_`` to UTF-16.
 
         bool
 
         If ``True`` (defaults to ``False`` unless MATLAB compatibility
-        is being done), ``numpy.unicode_`` and anything that is
+        is being done), ``numpy.str_`` and anything that is
         converted to them (``str``) will be converted to UTF-16 if
         possible before being written to file as ``numpy.uint16``. If
         doing so would lead to a loss of data (character can't be
         translated to UTF-16) or would change the shape of an array of
-        ``numpy.unicode_`` due to a character being converted into a
+        ``numpy.str_`` due to a character being converted into a
         pair of 2-bytes, the conversion will not be made and the string
         will be stored in UTF-32 form as a ``numpy.uint32``.
 
