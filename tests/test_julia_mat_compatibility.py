@@ -87,9 +87,9 @@ def test_back_and_forth_julia():
         else:
             to_julia[dt + "_empty"] = np.array([], dtype=dt)
 
-    to_julia["float32_nan"] = np.float32(np.NaN)
+    to_julia["float32_nan"] = np.float32(np.nan)
     to_julia["float32_inf"] = np.float32(np.inf)
-    to_julia["float64_nan"] = np.float64(np.NaN)
+    to_julia["float64_nan"] = np.float64(np.nan)
     to_julia["float64_inf"] = np.float64(-np.inf)
 
     to_julia["object"] = random_numpy_scalar(
