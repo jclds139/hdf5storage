@@ -76,11 +76,7 @@ def test_read_empty():
         shape[random.randrange(len(shape))] = 0
         shape = tuple(shape)
         dtype = random.choice(
-            [
-                prefix + "int" + suffix
-                for prefix in ("u", "")
-                for suffix in ("8", "16", "32", "64")
-            ]
+            [prefix + "int" + suffix for prefix in ("u", "") for suffix in ("8", "16", "32", "64")]
             + ["single", "double"],
         )
         with tempfile.TemporaryDirectory() as folder:

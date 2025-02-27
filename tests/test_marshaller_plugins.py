@@ -24,10 +24,10 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+import importlib.metadata
 import os.path
 import tempfile
 
-import pkg_resources
 import pytest
 
 import hdf5storage
@@ -44,7 +44,7 @@ except:
 
 
 def test_marshaller_api_versions():
-    assert ("1.0",) == hdf5storage.plugins.supported_marshaller_api_versions()
+    assert hdf5storage.plugins.supported_marshaller_api_versions() == ("1.0",)
 
 
 def test_find_thirdparty_marshaller_plugins():
@@ -58,7 +58,7 @@ def test_find_thirdparty_marshaller_plugins():
         assert isinstance(v, dict)
         for k2, v2 in v.items():
             assert isinstance(k2, str)
-            assert isinstance(v2, pkg_resources.EntryPoint)
+            assert isinstance(v2, importlib.metadata.EntryPoint)
             if k2 == "example_hdf5storage_marshaller_plugin":
                 found_example = True
     assert has_example_hdf5storage_marshaller_plugin == found_example

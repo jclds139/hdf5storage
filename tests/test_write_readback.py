@@ -148,7 +148,7 @@ def _get_options():
     )
 
 
-# Function to write and then readback and optionall check everything
+# Function to write and then readback and optionally check everything
 # with the appropriate assert_equal.
 def write_readback(
     fmt,
@@ -179,20 +179,20 @@ def write_readback(
     name_type_w = random.choice(path_choices)
     name_type_r = random.choice(path_choices)
     # Name to write with.
-    if name_type_w == bytes:
+    if name_type_w == bytes:  # noqa: E721
         name_w = name.encode("utf-8")
     elif name_type_w in (pathlib.PurePath, pathlib.PurePosixPath, pathlib.PosixPath):
         name_w = name_type_w(name)
-    elif name_type_w != str:
+    elif name_type_w != str:  # noqa: E721
         name_w = name_type_w(name[posixpath.isabs(name) :])
     else:
         name_w = name
     # Name to read with.
-    if name_type_r == bytes:
+    if name_type_r == bytes:  # noqa: E721
         name_r = name.encode("utf-8")
     elif name_type_r in (pathlib.PurePath, pathlib.PurePosixPath, pathlib.PosixPath):
         name_r = name_type_r(name)
-    elif name_type_r != str:
+    elif name_type_r != str:  # noqa: E721
         name_r = name_type_r(name[posixpath.isabs(name) :])
     else:
         name_r = name
@@ -222,12 +222,7 @@ def test_numpy_scalar(fmt, dtype):
 
 @pytest.mark.parametrize(
     ("fmt", "dtype", "dimensions"),
-    {
-        (fmt, dt, dims)
-        for fmt in fmts
-        for dt in dtypes_by_option[fmt]
-        for dims in range(1, 4)
-    },
+    {(fmt, dt, dims) for fmt in fmts for dt in dtypes_by_option[fmt] for dims in range(1, 4)},
 )
 def test_numpy_array(fmt, dtype, dimensions):
     # Makes a random numpy array of the given type, writes it and
@@ -289,21 +284,13 @@ def test_numpy_structured_array_unicode_fields(fmt):
     # in its fields, writes it and reads it back, and then compares
     # it.
     shape = random_numpy_shape(1, max_structured_ndarray_axis_length)
-    data = (
-        random_structured_numpy_array(shape, nonascii_fields=True)
-        .view(np.recarray)
-        .copy()
-    )
+    data = random_structured_numpy_array(shape, nonascii_fields=True)
     write_readback(fmt, data)
 
 
 @pytest.mark.parametrize(
     ("fmt", "ch"),
-    {
-        (fmt, ch)
-        for fmt in fmts
-        for ch in ["\x00", "/", "\\"] + [i * "." for i in range(1, 10)]
-    },
+    {(fmt, ch) for fmt in fmts for ch in ["\x00", "/", "\\"] + [i * "." for i in range(1, 10)]},
 )
 def test_numpy_structured_array_field_special_char(fmt, ch):
     # Makes a random 1d structured ndarray with the character
@@ -370,17 +357,13 @@ def test_numpy_recarray_unicode_fields(fmt):
     # in its fields, converts it to a recarray, writes it and reads
     # it back, and then compares it.
     shape = random_numpy_shape(1, max_structured_ndarray_axis_length)
-    data = random_structured_numpy_array(shape, nonascii_fields=True)
+    data = random_structured_numpy_array(shape, nonascii_fields=True).view(np.recarray).copy()
     write_readback(fmt, data)
 
 
 @pytest.mark.parametrize(
     ("fmt", "ch"),
-    {
-        (fmt, ch)
-        for fmt in fmts
-        for ch in ["\x00", "/", "\\"] + [i * "." for i in range(1, 10)]
-    },
+    {(fmt, ch) for fmt in fmts for ch in ["\x00", "/", "\\"] + [i * "." for i in range(1, 10)]},
 )
 def test_numpy_recarray_field_special_char(fmt, ch):
     # Makes a random 1d structured ndarray with the character
@@ -393,9 +376,7 @@ def test_numpy_recarray_field_special_char(fmt, ch):
     else:
         field_names[1] = field_names[1][0] + ch + field_names[1][1:]
     shape = random_numpy_shape(1, max_structured_ndarray_axis_length)
-    data = (
-        random_structured_numpy_array(shape, names=field_names).view(np.recarray).copy()
-    )
+    data = random_structured_numpy_array(shape, names=field_names).view(np.recarray).copy()
     write_readback(fmt, data)
 
 
@@ -407,7 +388,7 @@ def test_numpy_chararray(fmt, dimensions):
     # Makes a random numpy array of bytes, converts it to a
     # chararray, writes it and reads it back, and then compares it.
     shape = random_numpy_shape(dimensions, max_array_axis_length)
-    data = random_numpy(shape, "S").view(np.chararray).copy()
+    data = random_numpy(shape, "S").view(np.char.chararray).copy()
     write_readback(fmt, data)
 
 
@@ -419,7 +400,7 @@ def test_numpy_chararray_empty(fmt, num_chars):
     # Makes an empty numpy array of bytes of the given number of
     # characters, converts it to a chararray, writes it and reads it
     # back, and then compares it.
-    data = np.array([], "S" + str(num_chars)).view(np.chararray).copy()
+    data = np.array([], "S" + str(num_chars)).view(np.char.chararray).copy()
     write_readback(fmt, data)
 
 
@@ -574,34 +555,30 @@ def test_python_collection(fmt, tp, same_dims):
     # reads it back, and then compares it.
     if tp in (set, frozenset):
         data = tp(random_list(max_list_length, python_or_numpy="python"))
-    else:
-        if same_dims == "same-dims":
-            shape = random_numpy_shape(random.randrange(2, 4), random.randrange(1, 4))
-            dtypes = (
-                "uint8",
-                "uint16",
-                "uint32",
-                "uint64",
-                "int8",
-                "int16",
-                "int32",
-                "int64",
-                "float32",
-                "float64",
-                "complex64",
-                "complex128",
-            )
-            data = tp(
-                [
-                    random_numpy(shape, random.choice(dtypes), allow_nan=True)
-                    for i in range(random.randrange(2, 7))
-                ],
-            )
+    elif same_dims == "same-dims":
+        shape = random_numpy_shape(random.randrange(2, 4), random.randrange(1, 4))
+        dtypes = (
+            "uint8",
+            "uint16",
+            "uint32",
+            "uint64",
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "float32",
+            "float64",
+            "complex64",
+            "complex128",
+        )
+        data = tp(
+            [random_numpy(shape, random.choice(dtypes), allow_nan=True) for i in range(random.randrange(2, 7))],
+        )
 
-        elif same_dims == "diff-dims":
-            data = tp(random_list(max_list_length, python_or_numpy="numpy"))
-        else:
-            raise ValueError("invalid value of same_dims")
+    elif same_dims == "diff-dims":
+        data = tp(random_list(max_list_length, python_or_numpy="numpy"))
+    else:
+        raise ValueError("invalid value of same_dims")
     write_readback(fmt, data)
 
 
@@ -745,7 +722,7 @@ def test_float_ninf(fmt):
 def test_float_nan(fmt):
     data = float(np.nan)
     out = write_readback(fmt, data, check=False)
-    assert math.isnan(out)
+    assert np.all(np.isnan(out))
 
 
 @pytest.mark.parametrize("fmt", fmts)
@@ -866,8 +843,7 @@ def test_fraction(fmt):
         for dt in {
             v
             for v in itertools.chain(np.sctypeDict, np.sctypeDict.values())
-            if not isinstance(v, int)
-            and v not in ("V", "void", "void0", "Void0", np.void)
+            if not isinstance(v, int) and v not in ("V", "void", "void0", "Void0", np.void)
         }
     },
 )
@@ -942,8 +918,7 @@ def test_dtype_structured_with_offsets_titles(fmt):
                 s = random_str_some_unicode(random.randint(1, 10))
             titles.append(s)
         formats = [
-            (random.choice(base_dtypes), random_numpy_shape(random.randint(1, 4), 10))
-            for _ in range(len(names))
+            (random.choice(base_dtypes), random_numpy_shape(random.randint(1, 4), 10)) for _ in range(len(names))
         ]
         offsets = [random.randint(0, 100) for _ in range(len(names))]
         desc = {

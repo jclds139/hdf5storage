@@ -44,8 +44,8 @@ class TypeNotMatlabCompatibleError(Hdf5storageError):
     thrown depending on the value of
     ``Options.action_for_matlab_incompatible``.
 
-    See Also
-    --------
+    See Also:
+    ---------
     hdf5storage.Options.matlab_compatible
     hdf5storage.Options.action_for_matlab_incompatible
 

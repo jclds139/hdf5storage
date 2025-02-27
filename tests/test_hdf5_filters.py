@@ -92,7 +92,6 @@ def test_read_filtered_data(compression, shuffle, fletcher32, gzip_level):
     ],
 )
 def test_write_filtered_data(compression, shuffle, fletcher32, gzip_level):
-
     # Make some random data. The dtype must be restricted so that it can
     # be read back reliably.
     dims = random.randint(1, 4)

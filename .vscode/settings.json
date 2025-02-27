@@ -1,0 +1,45 @@
+{
+    "editor.formatOnSave": true,
+    "editor.minimap.enabled": false,
+    "editor.rulers": [
+        120
+    ],
+    "files.trimTrailingWhitespace": true,
+    "python.analysis.autoImportCompletions": false,
+    // Linting
+    "ruff.importStrategy": "fromEnvironment",
+    "ruff.configuration": "pyproject.toml",
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.fixAll": "explicit",
+            "source.organizeImports": "explicit"
+        },
+    },
+    // Testing
+    "python.testing.pytestEnabled": true,
+    "python.testing.unittestEnabled": false,
+    "python.testing.unittestArgs": [ // To help with unit test discover when there are tests/__init__.py files.
+    ],
+    "python.testing.pytestArgs": [
+        "-v", // verbose
+        "-s", // don't capture output
+        "-l", // show locals when something fails
+        // "--disable-warnings",
+        ".", // any tests
+        "--no-cov" // VSCode can't do code coverage.
+    ],
+    "terminal.integrated.defaultProfile.windows": "Git Bash",
+    "[yaml]": {
+        "editor.formatOnSave": false
+    },
+    // Section loads schema validation
+    "yaml.maxItemsComputed": 15000, // override default value of 5000
+    "yaml.schemas": {
+        "./rs_cla_model/rs_cla_model/nastran/schemas/secload_schema.json": "*.secload"
+    },
+    "files.associations": {
+        "*.secload": "yaml"
+    },
+}

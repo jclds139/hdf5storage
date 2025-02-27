@@ -59,7 +59,7 @@ def test_back_and_forth_julia():
     ]
 
     script_names = ["julia_read_mat.jl"]
-    for i in range(0, len(script_names)):
+    for i in range(len(script_names)):
         script_names[i] = os.path.join(os.path.dirname(__file__), script_names[i])
 
     to_julia = {}
@@ -125,7 +125,7 @@ def test_back_and_forth_julia():
         try:
             import scipy.io
 
-            for i in range(0, len(mat_files)):
+            for i in range(len(mat_files)):
                 mat_files[i] = os.path.join(temp_dir, mat_files[i])
             scipy.io.savemat(file_name=mat_files[0], mdict=to_julia)
             hdf5storage.savemat(file_name=mat_files[1], mdict=to_julia)
@@ -137,8 +137,7 @@ def test_back_and_forth_julia():
             hdf5storage.loadmat(file_name=mat_files[3], mdict=from_julia_v7p3_to_v7p3)
         except:
             pytest.skip(
-                "Julia or the MAT package are unavailable "
-                "or their API/s have changed.",
+                "Julia or the MAT package are unavailable or their API/s have changed.",
             )
 
     # Check the results.

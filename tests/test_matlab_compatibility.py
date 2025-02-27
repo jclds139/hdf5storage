@@ -36,11 +36,11 @@ import hdf5storage
 
 def test_back_and_forth_matlab():
     mat_files = ["types_v7p3.mat", "types_v7.mat", "python_v7p3.mat", "python_v7.mat"]
-    for i in range(0, len(mat_files)):
+    for i in range(len(mat_files)):
         mat_files[i] = os.path.join(os.path.dirname(__file__), mat_files[i])
 
     script_names = ["make_mat_with_all_types.m", "read_write_mat.m"]
-    for i in range(0, len(script_names)):
+    for i in range(len(script_names)):
         script_names[i] = os.path.join(os.path.dirname(__file__), script_names[i])
 
     types_v7 = {}

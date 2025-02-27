@@ -54,7 +54,7 @@ def test_multi_write():
     # Makes a random dict of random paths and variables (random number
     # of randomized paths with random numpy arrays as values).
     data = {}
-    for _ in range(0, random.randint(min_dict_keys, max_dict_keys)):
+    for _ in range(random.randint(min_dict_keys, max_dict_keys)):
         name = random_name()
         data[name] = random_numpy(
             random_numpy_shape(
@@ -80,7 +80,7 @@ def test_multi_read():
     # Makes a random dict of random paths and variables (random number
     # of randomized paths with random numpy arrays as values).
     data = {}
-    for _ in range(0, random.randint(min_dict_keys, max_dict_keys)):
+    for _ in range(random.randint(min_dict_keys, max_dict_keys)):
         name = random_name()
         data[name] = random_numpy(
             random_numpy_shape(

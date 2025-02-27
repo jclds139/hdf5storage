@@ -26,27 +26,15 @@
 
 """Module for handling paths."""
 
-
 import collections.abc
 import pathlib
 import posixpath
 import re
-import sys
-from typing import Dict, Tuple, Union
-
-if sys.version_info >= (3, 9):
-    from collections.abc import Sequence
-    from re import Match, Pattern
-else:
-    from typing import Match, Pattern, Sequence
+from collections.abc import Sequence
+from re import Match, Pattern
 
 # Define the type for all paths
-Path = Union[
-    str,
-    bytes,
-    pathlib.PurePath,
-    Sequence[Union[str, bytes, pathlib.PurePath]],
-]
+Path = str | bytes | pathlib.PurePath | Sequence[str | bytes | pathlib.PurePath]
 
 
 # For escaping and unescaping unicode paths, we need compiled regular
@@ -66,7 +54,7 @@ _find_fslashnull_re: Pattern[str] = re.compile("[\\\\/\x00]")
 _find_escapes_re: Pattern[str] = re.compile(
     "\\\\+(x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4}|U[0-9a-fA-F]{8})",
 )
-_char_escape_conversions: Dict[str, str] = {"\x00": "\\x00", "/": "\\x2f", "\\": "\\\\"}
+_char_escape_conversions: dict[str, str] = {"\x00": "\\x00", "/": "\\x2f", "\\": "\\\\"}
 
 
 def _replace_fun_escape(m: Match[str]) -> str:
@@ -82,12 +70,12 @@ def _replace_fun_escape(m: Match[str]) -> str:
     ----------
     m : regex match
 
-    Returns
+    Returns:
     -------
     s : str
         The hex excaped version of the character.
 
-    Raises
+    Raises:
     ------
     NotImplementedError
         If the character is not in the supported character code range.
@@ -108,9 +96,9 @@ def _replace_fun_escape(m: Match[str]) -> str:
         return f"\\u{value:04x}"
     if value <= 0xFFFFFFFF:
         return f"\\U{value:08x}"
+    msg = "Cannot escape a character whose code it outside of the range 0 - 0xFFFFFFFF."
     raise NotImplementedError(
-        "Cannot escape a character whose code it outside of the range "
-        "0 - 0xFFFFFFFF.",
+        msg,
     )
 
 
@@ -127,7 +115,7 @@ def _replace_fun_unescape(m: Match[str]) -> str:
     ----------
     m : regex match
 
-    Returns
+    Returns:
     -------
     c : str
         The unescaped character.
@@ -142,7 +130,7 @@ def _replace_fun_unescape(m: Match[str]) -> str:
     return slsh * (count - 1) + c
 
 
-def escape_path(pth: Union[str, bytes]) -> str:
+def escape_path(pth: str | bytes) -> str:
     r"""Hex/unicode escapes a path.
 
     Escapes a path so that it can be represented faithfully in an HDF5
@@ -161,17 +149,17 @@ def escape_path(pth: Union[str, bytes]) -> str:
     pth : str or bytes
         The path to escape.
 
-    Returns
+    Returns:
     -------
     epth : str
         The escaped path.
 
-    Raises
+    Raises:
     ------
     TypeError
         If `pth` is not the right type.
 
-    See Also
+    See Also:
     --------
     unescape_path
 
@@ -179,7 +167,8 @@ def escape_path(pth: Union[str, bytes]) -> str:
     if isinstance(pth, bytes):
         pth = pth.decode("utf-8")
     if not isinstance(pth, str):
-        raise TypeError("pth must be str or bytes.")
+        msg = "pth must be str or bytes."
+        raise TypeError(msg)
     match = _find_dots_re.match(pth)
     if match is None:
         prefix = ""
@@ -190,7 +179,7 @@ def escape_path(pth: Union[str, bytes]) -> str:
     return prefix + _find_fslashnull_re.sub(_replace_fun_escape, s)
 
 
-def unescape_path(pth: Union[str, bytes]) -> str:
+def unescape_path(pth: str | bytes) -> str:
     r"""Hex/unicode unescapes a path.
 
     Unescapes a path. Valid escapeds are ``'\xYY'``, ``'\uYYYY', or
@@ -205,19 +194,19 @@ def unescape_path(pth: Union[str, bytes]) -> str:
     pth : str or bytes
         The path to unescape.
 
-    Returns
+    Returns:
     -------
     unpth : str
         The unescaped path.
 
-    Raises
+    Raises:
     ------
     TypeError
         If `pth` is not the right type.
     ValueError
         If an invalid escape is found.
 
-    See Also
+    See Also:
     --------
     escape_path
 
@@ -225,17 +214,19 @@ def unescape_path(pth: Union[str, bytes]) -> str:
     if isinstance(pth, bytes):
         pth = pth.decode("utf-8")
     if not isinstance(pth, str):
-        raise TypeError("pth must be str or bytes.")
+        msg = "pth must be str or bytes."
+        raise TypeError(msg)
     # Look for invalid escapes.
     if _find_invalid_escape_re.search(pth) is not None:
-        raise ValueError("Invalid escape found.")
+        msg = "Invalid escape found."
+        raise ValueError(msg)
     # Do all hex/unicode escapes.
     s = _find_escapes_re.sub(_replace_fun_unescape, pth)
     # Do all double backslash escapes.
     return s.replace(b"\\\\".decode("ascii"), b"\\".decode("ascii"))
 
 
-def process_path(pth: Path) -> Tuple[str, str]:
+def process_path(pth: Path) -> tuple[str, str]:  # noqa: C901
     """Processes paths.
 
     Processes the provided path and breaks it into it Group part
@@ -262,7 +253,7 @@ def process_path(pth: Path) -> Tuple[str, str]:
         ``bytes``, and ``pathlib.PurePath``. For separated paths,
         escaping will be done on each part.
 
-    Returns
+    Returns:
     -------
     groupname : str
         The path to the Group containing the target `pth` was pointing
@@ -271,12 +262,12 @@ def process_path(pth: Path) -> Tuple[str, str]:
         The name of the target pointed to by `pth` in the Group
         `groupname`.
 
-    Raises
+    Raises:
     ------
     TypeError
         If `pth` is not of the right type.
 
-    See Also
+    See Also:
     --------
     escape_path
 
@@ -288,10 +279,7 @@ def process_path(pth: Path) -> Tuple[str, str]:
         p = pth
     elif isinstance(pth, pathlib.PurePath):
         parts = pth.parts
-        if pth.root not in ("", "/"):
-            p = posixpath.join(*parts[1:])
-        else:
-            p = posixpath.join(*parts)
+        p = posixpath.join(*parts[1:]) if pth.root not in ("", "/") else posixpath.join(*parts)
     elif isinstance(pth, collections.abc.Sequence):
         # Escape (and possibly convert to str) each element and then
         # join them all together.
@@ -304,15 +292,16 @@ def process_path(pth: Path) -> Tuple[str, str]:
             elif isinstance(s, str):
                 val = s
             else:
+                msg = "Elements of p must be str, bytes, or pathlib.PurePath."
                 raise TypeError(
-                    "Elements of p must be str, bytes, or pathlib.PurePath.",
+                    msg,
                 )
             parts_seq.append(escape_path(val))
         p = posixpath.join(*parts_seq)
     else:
+        msg = "p must be str, bytes, pathlib.PurePath, or an Sequence solely of one of those three."
         raise TypeError(
-            "p must be str, bytes, pathlib.PurePath, or an Sequence solely of one of "
-            "those three.",
+            msg,
         )
 
     # Remove double slashes and a non-root trailing slash.
