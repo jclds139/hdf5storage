@@ -70,12 +70,12 @@ def _replace_fun_escape(m: Match[str]) -> str:
     ----------
     m : regex match
 
-    Returns:
+    Returns
     -------
     s : str
         The hex excaped version of the character.
 
-    Raises:
+    Raises
     ------
     NotImplementedError
         If the character is not in the supported character code range.
@@ -115,7 +115,7 @@ def _replace_fun_unescape(m: Match[str]) -> str:
     ----------
     m : regex match
 
-    Returns:
+    Returns
     -------
     c : str
         The unescaped character.
@@ -149,17 +149,17 @@ def escape_path(pth: str | bytes) -> str:
     pth : str or bytes
         The path to escape.
 
-    Returns:
+    Returns
     -------
     epth : str
         The escaped path.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `pth` is not the right type.
 
-    See Also:
+    See Also
     --------
     unescape_path
 
@@ -194,19 +194,19 @@ def unescape_path(pth: str | bytes) -> str:
     pth : str or bytes
         The path to unescape.
 
-    Returns:
+    Returns
     -------
     unpth : str
         The unescaped path.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `pth` is not the right type.
     ValueError
         If an invalid escape is found.
 
-    See Also:
+    See Also
     --------
     escape_path
 
@@ -227,7 +227,7 @@ def unescape_path(pth: str | bytes) -> str:
 
 
 def process_path(pth: Path) -> tuple[str, str]:  # noqa: C901
-    """Processes paths.
+    """Process paths.
 
     Processes the provided path and breaks it into it Group part
     (`groupname`) and target part (`targetname`). ``bytes`` paths are
@@ -253,7 +253,7 @@ def process_path(pth: Path) -> tuple[str, str]:  # noqa: C901
         ``bytes``, and ``pathlib.PurePath``. For separated paths,
         escaping will be done on each part.
 
-    Returns:
+    Returns
     -------
     groupname : str
         The path to the Group containing the target `pth` was pointing
@@ -262,12 +262,12 @@ def process_path(pth: Path) -> tuple[str, str]:  # noqa: C901
         The name of the target pointed to by `pth` in the Group
         `groupname`.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `pth` is not of the right type.
 
-    See Also:
+    See Also
     --------
     escape_path
 

@@ -77,7 +77,7 @@ lint.unfixable = [
 ]
 
 [tool.ruff.lint.pydocstyle]
-convention = "google" # Accepts: "google", "numpy", or "pep257".
+convention = "numpy" # Accepts: "google", "numpy", or "pep257".
 
 [build-system]
 requires = ["poetry-core"]

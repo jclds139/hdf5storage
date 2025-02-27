@@ -150,7 +150,7 @@ class Options:
         to be given to be more compatible with future versions of this
         package where more options will be added.
 
-    Attributes:
+    Attributes
     ----------
     store_python_metadata : bool
     matlab_compatible : bool
@@ -283,11 +283,11 @@ class Options:
         to use. The default is to use the default one from
         ``get_default_marshaller_collection``.
 
-        Warning:
+        Warning
         -------
         This property does **NOT** return a copy.
 
-        See Also:
+        See Also
         --------
         MarshallerCollection
         get_default_marshaller_collection
@@ -388,7 +388,7 @@ class Options:
         ('discard'), or throw a ``TypeNotMatlabCompatibleError``
         exception. The default is 'error'.
 
-        See Also:
+        See Also
         --------
         matlab_compatible
         exceptions.TypeNotMatlabCompatibleError
@@ -470,7 +470,7 @@ class Options:
         Must be ``True`` if doing MATLAB compatibility. MATLAB can only
         import 2D and higher dimensional arrays.
 
-        See Also:
+        See Also
         --------
         oned_as
 
@@ -500,7 +500,7 @@ class Options:
         Must be ``True`` if doing MATLAB compatibility. MATLAB uses
         UTF-16 for its strings.
 
-        See Also:
+        See Also
         --------
         numpy.bytes_
         convert_numpy_str_to_utf16
@@ -536,7 +536,7 @@ class Options:
         Must be ``True`` if doing MATLAB compatibility. MATLAB uses
         UTF-16 for its strings.
 
-        See Also:
+        See Also
         --------
         numpy.bytes_
         convert_numpy_str_to_utf16
@@ -696,7 +696,7 @@ class Options:
 
         Must already be escaped.
 
-        See Also:
+        See Also
         --------
         pathesc.escape_path
 
@@ -725,7 +725,7 @@ class Options:
         doing MATLAB compatibility), this option controls whether 1D
         arrays become row vectors or column vectors.
 
-        See Also:
+        See Also
         --------
         make_atleast_2d
 
@@ -751,7 +751,7 @@ class Options:
 
         .. versionadded:: 0.2
 
-        See Also:
+        See Also
         --------
         dict_like_values_name
 
@@ -777,7 +777,7 @@ class Options:
 
         .. versionadded:: 0.2
 
-        See Also:
+        See Also
         --------
         dict_like_keys_name
 
@@ -799,7 +799,7 @@ class Options:
         If ``True``, python objects (datasets) larger than
         ``compress_size_threshold`` will be compressed.
 
-        See Also:
+        See Also
         --------
         compress_size_threshold
         compression_algorithm
@@ -824,7 +824,7 @@ class Options:
         Minimum size in bytes a python object must be for it to be
         compressed if ``compress`` is set. Must be non-negative.
 
-        See Also:
+        See Also
         --------
         compress
 
@@ -862,7 +862,7 @@ class Options:
         ``'szip'`` is a compression algorithm that has some patents and
         license restrictions. It is not always available.
 
-        See Also:
+        See Also
         --------
         compress
         compress_size_threshold
@@ -893,7 +893,7 @@ class Options:
         inclusive. Lower values are faster while higher values give
         better compression.
 
-        See Also:
+        See Also
         --------
         compress
         compression_algorithm
@@ -917,7 +917,7 @@ class Options:
         run through the shuffle filter, which reversibly rearranges the
         data to improve compression.
 
-        See Also:
+        See Also
         --------
         compress
         h5py.Group.create_dataset
@@ -941,7 +941,7 @@ class Options:
         run through the fletcher32 filter, which stores a checksum with
         each chunk so that data corruption can be more easily detected.
 
-        See Also:
+        See Also
         --------
         compress
         shuffle_filter
@@ -971,7 +971,7 @@ class Options:
         all uncompressed data to be chuncked regardless of how small and
         can increase file sizes.
 
-        See Also:
+        See Also
         --------
         compress
         shuffle_filter
@@ -1043,18 +1043,18 @@ class MarshallerCollection:
         The user marshaller/s to add to the collection. Must inherit
         from ``hdf5storage.Marshallers.TypeMarshaller``.
 
-    Attributes:
+    Attributes
     ----------
     priority : tuple of str
 
-    Raises:
+    Raises
     ------
     TypeError
         If one of the arguments is the wrong type.
     ValueError
         If one of the arguments has an invalid value.
 
-    See Also:
+    See Also
     --------
     hdf5storage.Marshallers
     hdf5storage.Marshallers.TypeMarshaller
@@ -1262,14 +1262,14 @@ class MarshallerCollection:
 
     @staticmethod
     def _import_marshaller_modules(m: Marshallers.TypeMarshaller) -> bool:
-        """Imports the modules required by the marshaller.
+        """Import the modules required by the marshaller.
 
         Parameters
         ----------
         m : marshaller
             The marshaller to load the modules for.
 
-        Returns:
+        Returns
         -------
         success : bool
             Whether the modules `m` requires could be imported
@@ -1304,12 +1304,12 @@ class MarshallerCollection:
             collection. Must inherit from
             ``hdf5storage.Marshallers.TypeMarshaller``.
 
-        Raises:
+        Raises
         ------
         TypeError
             If one of `marshallers` is the wrong type.
 
-        See Also:
+        See Also
         --------
         hdf5storage.Marshallers.TypeMarshaller
 
@@ -1330,7 +1330,7 @@ class MarshallerCollection:
         self: "MarshallerCollection",
         marshallers: Marshallers.TypeMarshaller | Iterable[Marshallers.TypeMarshaller],
     ) -> None:
-        """Removes a marshaller/s from the user provided list.
+        """Remove a marshaller/s from the user provided list.
 
         Removes a marshaller or an Iterable of them from the user
         provided set of marshallers.
@@ -1349,7 +1349,7 @@ class MarshallerCollection:
         self._update_marshallers()
 
     def clear_marshallers(self: "MarshallerCollection") -> None:
-        """Clears the list of user provided marshallers.
+        """Clear the list of user provided marshallers.
 
         Removes all user provided marshallers, but not the builtin ones
         from the ``hdf5storage.Marshallers`` module or those from
@@ -1363,7 +1363,7 @@ class MarshallerCollection:
         self: "MarshallerCollection",
         tp: str | type[Any],
     ) -> tuple[Marshallers.TypeMarshaller | None, bool]:
-        """Gets the appropriate marshaller for a type.
+        """Get the appropriate marshaller for a type.
 
         Retrieves the marshaller, if any, that can be used to read/write
         a Python object with type 'tp'. The modules it requires, if
@@ -1375,7 +1375,7 @@ class MarshallerCollection:
             Python object ``type`` (which would be the class reference)
             or its string representation like ``'collections.deque'``.
 
-        Returns:
+        Returns
         -------
         marshaller : marshaller or None
             The marshaller that can read/write the type to
@@ -1384,7 +1384,7 @@ class MarshallerCollection:
             Whether the required modules for reading the type are
             present or not.
 
-        See Also:
+        See Also
         --------
         hdf5storage.Marshallers.TypeMarshaller.types
 
@@ -1409,7 +1409,7 @@ class MarshallerCollection:
         self: "MarshallerCollection",
         type_string: str,
     ) -> tuple[Marshallers.TypeMarshaller | None, bool]:
-        """Gets the appropriate marshaller for a type string.
+        """Get the appropriate marshaller for a type string.
 
         Retrieves the marshaller, if any, that can be used to read/write
         a Python object with the given type string. The modules it
@@ -1420,7 +1420,7 @@ class MarshallerCollection:
         type_string : str
             Type string for a Python object.
 
-        Returns:
+        Returns
         -------
         marshaller : marshaller or None
             The marshaller that can read/write the type to
@@ -1429,7 +1429,7 @@ class MarshallerCollection:
             Whether the required modules for reading the type are
             present or not.
 
-        See Also:
+        See Also
         --------
         hdf5storage.Marshallers.TypeMarshaller.python_type_strings
 
@@ -1451,7 +1451,7 @@ class MarshallerCollection:
         self: "MarshallerCollection",
         matlab_class: str,
     ) -> tuple[Marshallers.TypeMarshaller | None, bool]:
-        """Gets the appropriate marshaller for a MATLAB class string.
+        """Get the appropriate marshaller for a MATLAB class string.
 
         Retrieves the marshaller, if any, that can be used to read/write
         a Python object associated with the given MATLAB class
@@ -1462,7 +1462,7 @@ class MarshallerCollection:
         matlab_class : str
             MATLAB class string for a Python object.
 
-        Returns:
+        Returns
         -------
         marshaller : marshaller or None
             The marshaller that can read/write the type to
@@ -1471,7 +1471,7 @@ class MarshallerCollection:
             Whether the required modules for reading the type are
             present or not.
 
-        See Also:
+        See Also
         --------
         hdf5storage.Marshallers.TypeMarshaller.python_type_strings
 
@@ -1531,7 +1531,7 @@ class File(collections.abc.MutableMapping):
     operations allowed on ``dict``, including operations that modify
     it.
 
-    Example:
+    Example
     -------
        >>> import hdf5storage
        >>> with hdf5storage.File('data.h5', writable=True) as f:
@@ -1540,12 +1540,12 @@ class File(collections.abc.MutableMapping):
        >>> a
        4
 
-    Note:
+    Note
     ----
     This class is threadsafe to the ``threading`` module, but not the
     ``multiprocessing`` module.
 
-    Warning:
+    Warning
     -------
     The passed ``Options`` object is shallow copied, meaning that
     changes to the original will not affect an instance of this class
@@ -1577,7 +1577,7 @@ class File(collections.abc.MutableMapping):
         If `options` was not provided or was ``None``, these are used as
         arguments to make a ``Options``.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
@@ -1587,12 +1587,12 @@ class File(collections.abc.MutableMapping):
         If the file cannot be opened or some other file operation
         failed.
 
-    Attributes:
+    Attributes
     ----------
     closed : bool
         Whether the file is closed or not.
 
-    See Also:
+    See Also
     --------
     pathesc.escape_path
     collections.abc.Collection
@@ -1757,7 +1757,7 @@ class File(collections.abc.MutableMapping):
         return self._file is None
 
     def close(self: "File") -> None:
-        """Closes the file."""
+        """Close the file."""
         with self._lock:
             if self._file is not None:
                 self._file.close()
@@ -1766,7 +1766,7 @@ class File(collections.abc.MutableMapping):
     def flush(self: "File") -> None:
         """Flush contents to disk.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed.
@@ -1780,7 +1780,7 @@ class File(collections.abc.MutableMapping):
                 self._file.flush()
 
     def write(self: "File", data: Any, path: pathesc.Path = "/") -> None:
-        """Writes one piece of data into the file.
+        """Write one piece of data into the file.
 
         A wrapper around the ``writes`` method to write a single piece
         of data, `data`, to a single location, `path`.
@@ -1795,7 +1795,7 @@ class File(collections.abc.MutableMapping):
             it in and the basename is the Dataset/Group name to write it
             to. The default is ``'/'``.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed or it isn't writable.
@@ -1808,7 +1808,7 @@ class File(collections.abc.MutableMapping):
             ``action_for_matlab_incompatible`` option is set to
             ``'error'``.
 
-        See Also:
+        See Also
         --------
         writes
 
@@ -1832,7 +1832,7 @@ class File(collections.abc.MutableMapping):
             name is the Group to put it in and the basename is the name
             to write it to. The values are the data to write.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed or it isn't writable.
@@ -1900,7 +1900,7 @@ class File(collections.abc.MutableMapping):
                 )
 
     def read(self: "File", path: pathesc.Path = "/") -> Any:
-        """Reads one piece of data from the file.
+        """Read one piece of data from the file.
 
         A wrapper around the ``reads`` method to read a single piece of
         data at the   single location `path`.
@@ -1911,12 +1911,12 @@ class File(collections.abc.MutableMapping):
             The path to read from. ``str`` and ``bytes`` paths must be
             POSIX style. The default is ``'/'``.
 
-        Returns:
+        Returns
         -------
         data : any
             The data that is read.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed.
@@ -1927,7 +1927,7 @@ class File(collections.abc.MutableMapping):
         exceptions.CantReadError
             If reading the data can't be done.
 
-        See Also:
+        See Also
         --------
         reads
 
@@ -1943,13 +1943,13 @@ class File(collections.abc.MutableMapping):
             An iterable of paths to read data from. ``str`` and
             ``bytes`` paths must be POSIX style.
 
-        Returns:
+        Returns
         -------
         datas : Iterable
             An Iterable holding the piece of data for each path in
             `paths` in the same order.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed.
@@ -2010,12 +2010,12 @@ class File(collections.abc.MutableMapping):
     def __len__(self: "File") -> int:
         """Get the number of objects stored in the file root.
 
-        Returns:
+        Returns
         -------
         length : int
             The number of objects stored in the file root.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is not open.
@@ -2040,7 +2040,7 @@ class File(collections.abc.MutableMapping):
             return length
 
     def __contains__(self: "File", path: Any) -> bool:
-        """Checks if an object exists at the specified `path`.
+        """Check if an object exists at the specified `path`.
 
         Parameters
         ----------
@@ -2048,7 +2048,7 @@ class File(collections.abc.MutableMapping):
             The path to check for the existence of an object at. ``str``
             and ``bytes`` paths must be POSIX style.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is not open.
@@ -2070,22 +2070,22 @@ class File(collections.abc.MutableMapping):
     def __iter__(self: "File") -> Iterator[str]:
         """Get an Iterator over the names in the file root.
 
-        Warning:
+        Warning
         -------
         The names are returned as is, rather than unescaped. Use
         ``pathesc.unescape_path`` to unescape them.
 
-        Returns:
+        Returns
         -------
         it : Iterator
             Iterator over the names of the objects in the file root.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is not open.
 
-        See Also:
+        See Also
         --------
         pathesc.unescape_path
 
@@ -2107,7 +2107,7 @@ class File(collections.abc.MutableMapping):
             return it
 
     def __getitem__(self: "File", path: pathesc.Path) -> Any:
-        """Reads the object at the specified `path` from the file.
+        """Read the object at the specified `path` from the file.
 
         A wrapper around the ``reads`` method to read a single piece of
         data at the single location `path`.
@@ -2118,12 +2118,12 @@ class File(collections.abc.MutableMapping):
             The path to read from. ``str`` and ``bytes`` paths must be
             POSIX style.
 
-        Returns:
+        Returns
         -------
         data : any
             The data that is read.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed.
@@ -2132,7 +2132,7 @@ class File(collections.abc.MutableMapping):
         exceptions.CantReadError
             If reading the data can't be done.
 
-        See Also:
+        See Also
         --------
         reads
 
@@ -2140,7 +2140,7 @@ class File(collections.abc.MutableMapping):
         return self.reads((path,))[0]
 
     def __setitem__(self: "File", path: pathesc.Path, data: Any) -> None:
-        """Writes one piece of data into the file.
+        """Write one piece of data into the file.
 
         A wrapper around the ``writes`` method to write a single piece
         of data, `data`, to a single location, `path`.
@@ -2155,7 +2155,7 @@ class File(collections.abc.MutableMapping):
         data : any
             The python object to write.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed or it isn't writable.
@@ -2168,7 +2168,7 @@ class File(collections.abc.MutableMapping):
             ``action_for_matlab_incompatible`` option is set to
             ``'error'``.
 
-        See Also:
+        See Also
         --------
         writes
 
@@ -2188,7 +2188,7 @@ class File(collections.abc.MutableMapping):
             it in and the basename is the Dataset/Group name to write it
             to.
 
-        Raises:
+        Raises
         ------
         OSError
             If the file is closed or it isn't writable.
@@ -2214,7 +2214,7 @@ class File(collections.abc.MutableMapping):
 
 
 def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
-    """Writes data into an HDF5 file.
+    """Write data into an HDF5 file.
 
     Wrapper around ``File`` and ``File.writes``. Specifically, this
     function is
@@ -2233,7 +2233,7 @@ def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
     **keywords :
         Extra keyword arguments to pass to ``File``.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
@@ -2249,7 +2249,7 @@ def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
         ``action_for_matlab_incompatible`` option is set to
         ``'error'``.
 
-    See Also:
+    See Also
     --------
     File
     File.writes
@@ -2260,7 +2260,7 @@ def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
 
 
 def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
-    """Writes one piece of data into an HDF5 file.
+    """Write one piece of data into an HDF5 file.
 
     Wrapper around ``File`` and ``File.write``. Specifically, this
     function is
@@ -2280,12 +2280,12 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
     **keywords :
         Extra keyword arguments to pass to ``File``.
 
-    Returns:
+    Returns
     -------
     data : any
         The data that is read.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
@@ -2301,7 +2301,7 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
         ``action_for_matlab_incompatible`` option is set to
         ``'error'``.
 
-    See Also:
+    See Also
     --------
     File
     File.write
@@ -2312,7 +2312,7 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
 
 
 def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
-    """Reads pieces of data from an HDF5 file.
+    """Read pieces of data from an HDF5 file.
 
     Wrapper around ``File`` and ``File.reads`` with the exception that
     the ``matlab_compatible`` option is set to ``False`` if it isn't
@@ -2335,13 +2335,13 @@ def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
     **keywords :
         Extra keyword arguments to pass to ``File``.
 
-    Returns:
+    Returns
     -------
     datas : iterable
         An iterable holding the piece of data for each path in `paths`
         in the same order.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
@@ -2355,7 +2355,7 @@ def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
     exceptions.CantReadError
         If reading the data can't be done.
 
-    See Also:
+    See Also
     --------
     File
     File.read
@@ -2370,7 +2370,7 @@ def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
 
 
 def read(path: pathesc.Path = "/", **keywords: Any) -> Any:
-    """Reads one piece of data from an HDF5 file.
+    """Read one piece of data from an HDF5 file.
 
     Wrapper around ``File`` and ``File.reads`` with the exception that
     the ``matlab_compatible`` option is set to ``False`` if it isn't
@@ -2393,7 +2393,7 @@ def read(path: pathesc.Path = "/", **keywords: Any) -> Any:
     **keywords :
         Extra keyword arguments to pass to ``File``.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
@@ -2407,7 +2407,7 @@ def read(path: pathesc.Path = "/", **keywords: Any) -> Any:
     exceptions.CantReadError
         If reading the data can't be done.
 
-    See Also:
+    See Also
     --------
     File
     File.reads
@@ -2488,7 +2488,7 @@ def savemat(  # noqa: PLR0913
         Additional keywords arguments to be passed onto
         ``scipy.io.savemat`` if dispatching to SciPy (`format` < 7.3).
 
-    Raises:
+    Raises
     ------
     ImportError
         If `format` < 7.3 and the ``scipy`` module can't be found.
@@ -2498,7 +2498,7 @@ def savemat(  # noqa: PLR0913
         If writing a type not compatible with MATLAB and
         `action_for_matlab_incompatible` is set to ``'error'``.
 
-    Notes:
+    Notes
     -----
     Writing the same data and then reading it back from disk using the
     HDF5 based version 7.3 format (the functions in this package) or the
@@ -2506,7 +2506,7 @@ def savemat(  # noqa: PLR0913
     results. Each package supports a different set of data types and
     converts them to and from the same MATLAB types differently.
 
-    See Also:
+    See Also
     --------
     loadmat : Equivelent function to do reading.
     scipy.io.savemat : SciPy function this one models after and
@@ -2565,7 +2565,7 @@ def loadmat(  # noqa: PLR0913
     options: Options | None = None,
     **keywords: Any,
 ) -> dict[Any, Any]:
-    """Loads data to a MATLAB MAT file.
+    """Load data from a MATLAB MAT file.
 
     Reads data from the specified variables (or all) in a MATLAB MAT
     file. There are many different formats of MAT files. This package
@@ -2576,7 +2576,7 @@ def loadmat(  # noqa: PLR0913
     passed on. This function is modelled after the SciPy one (arguments
     not specific to this package have the same names, etc.).
 
-    Warning:
+    Warning
     -------
     Variables in `variable_names` that are missing from the file do not
     cause an exception and will just be missing from the output.
@@ -2613,14 +2613,14 @@ def loadmat(  # noqa: PLR0913
         ``scipy.io.loadmat`` if dispatching to SciPy if the file is not
         a version 7.3 or later format.
 
-    Returns:
+    Returns
     -------
     mdict : dict
         Dictionary of all the variables read from the MAT file (name
         as the key, and content as the value). If a variable was missing
         from the file, it will not be present here.
 
-    Raises:
+    Raises
     ------
     ImportError
         If it is not a version 7.3 .mat file and the ``scipy`` module
@@ -2630,7 +2630,7 @@ def loadmat(  # noqa: PLR0913
     exceptions.CantReadError
         If reading the data can't be done.
 
-    Notes:
+    Notes
     -----
     Writing the same data and then reading it back from disk using the
     HDF5 based version 7.3 format (the functions in this package) or the
@@ -2638,7 +2638,7 @@ def loadmat(  # noqa: PLR0913
     results. Each package supports a different set of data types and
     converts them to and from the same MATLAB types differently.
 
-    See Also:
+    See Also
     --------
     savemat : Equivalent function to do writing.
     scipy.io.loadmat : SciPy function this one models after and
@@ -2700,7 +2700,7 @@ def get_default_marshaller_collection() -> MarshallerCollection:
     The initial default only includes the builtin marshallers in the
     ``Marshallers`` submodule.
 
-    Returns:
+    Returns
     -------
     mc : MarshallerCollection
         The default MarshallerCollection.
@@ -2711,7 +2711,7 @@ def get_default_marshaller_collection() -> MarshallerCollection:
     future calls of this function till
     ``make_new_default_marshaller_collection`` is called.
 
-    See Also:
+    See Also
     --------
     make_new_default_marshaller_collection
 
@@ -2734,7 +2734,7 @@ def make_new_default_marshaller_collection(*args: Any, **keywords: Any) -> None:
         Keyword arguments to use in creating the
        ``MarshallerCollection``.
 
-    See Also:
+    See Also
     --------
     MarshallerCollection
     get_default_marshaller_collection

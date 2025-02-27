@@ -71,13 +71,13 @@ def does_dtype_have_a_zero_shape(dt: np.dtype) -> bool:
     dt : numpy.dtype
         The dtype to check.
 
-    Returns:
+    Returns
     -------
     yesno : bool
         Whether `dt` or one of its fields has a shape with at least one
         element that is zero.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `dt` is not a ``numpy.dtype``.
@@ -99,7 +99,7 @@ def read_all_attributes_into(
     attrs: h5py.AttributeManager,
     out: MutableMapping[str, Any],
 ) -> None:
-    """Reads all Attributes into a MutableMapping (dict-like).
+    """Read all Attributes into a MutableMapping (dict-like).
 
     Reads all Attributes into the MutableMapping (dict-like) out.
 
@@ -110,7 +110,7 @@ def read_all_attributes_into(
     out : MutableMapping
         The MutableMapping (dict-like) to write the Attributes into.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has the wrong type.
@@ -144,12 +144,12 @@ class LowLevelFile:
     options : hdf5storage.Options
         The options used for reading and writing.
 
-    Raises:
+    Raises
     ------
     TypeError
         If an argument has an invalid type.
 
-    Attributes:
+    Attributes
     ----------
     f : h5py.File
         The raw file handle.
@@ -213,7 +213,7 @@ class LowLevelFile:
         data: Any,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
-        """Writes a piece of data into the file in the given group.
+        """Write a piece of data into the file in the given group.
 
         Low level method to store a Python type (`data`) into the
         specified Group.
@@ -230,13 +230,13 @@ class LowLevelFile:
             The type string of the data, or ``None`` to deduce
             automatically.
 
-        Returns:
+        Returns
         -------
         obj : h5py.Dataset or h5py.Group or None
             The base Dataset or Group having the name `name` in `grp`
             that was made, or ``None`` if nothing was written.
 
-        Raises:
+        Raises
         ------
         NotImplementedError
             If writing `data` is not supported.
@@ -245,7 +245,7 @@ class LowLevelFile:
             ``self.options.action_for_matlab_incompatible`` is set to
             ``'error'``.
 
-        See Also:
+        See Also
         --------
         read_data
         hdf5storage.Options
@@ -275,7 +275,7 @@ class LowLevelFile:
         name: str | None,
         dsetgrp: h5py.Dataset | h5py.Group | None = None,
     ) -> Any:
-        """Writes a piece of data into the file.
+        """Write a piece of data into the file.
 
         Low level method to read a Python type of the specified name
         from specified Group.
@@ -293,12 +293,12 @@ class LowLevelFile:
             obtained and thus should not be re-obtained (``None``
             otherwise). If given, overrides `grp` and `name`.
 
-        Returns:
+        Returns
         -------
         data
             The data named `name` in Group `grp`.
 
-        Raises:
+        Raises
         ------
         TypeError
             If an argument has an invalid type.
@@ -307,7 +307,7 @@ class LowLevelFile:
         CantReadError
             If the data cannot be read successfully.
 
-        See Also:
+        See Also
         --------
         write_data
         hdf5storage.Options
@@ -374,7 +374,7 @@ class LowLevelFile:
         self: "LowLevelFile",
         data: np.ndarray,
     ) -> np.ndarray | h5py.Reference:
-        """Writes an array of objects recursively.
+        """Write an array of objects recursively.
 
         Writes the elements of the given object array recursively in the
         HDF5 Group ``self.options.group_for_references`` and returns an
@@ -385,21 +385,21 @@ class LowLevelFile:
         data : numpy.ndarray of objects
             Numpy object array to write the elements of.
 
-        Returns:
+        Returns
         -------
         obj_array : numpy.ndarray of h5py.Reference
             A reference array pointing to all the elements written to
             the HDF5 file. For those that couldn't be written, the
             respective element points to the canonical empty.
 
-        Raises:
+        Raises
         ------
         TypeNotMatlabCompatibleError
             If writing a type not compatible with MATLAB and
             ``self.options.action_for_matlab_incompatible`` is set to
             ``'error'``.
 
-        See Also:
+        See Also
         --------
         read_object_array
         hdf5storage.Options.group_for_references
@@ -499,7 +499,7 @@ class LowLevelFile:
         self: "LowLevelFile",
         data: np.ndarray | h5py.Reference,
     ) -> np.ndarray | np.object_:
-        r"""Reads an array of objects recursively.
+        r"""Read an array of objects recursively.
 
         Reads the elements of the given HDF5 Reference array recursively
         and constructs a ``numpy.object_`` array from its elements,
@@ -511,18 +511,18 @@ class LowLevelFile:
             The array of HDF5 References to read and make an object
             array from.
 
-        Raises:
+        Raises
         ------
         NotImplementedError
             If reading the object from file is currently not supported.
 
-        Returns:
+        Returns
         -------
         obj_array : numpy.ndarray of numpy.object\_
             The Python object array containing the items pointed to by
             `data`.
 
-        See Also:
+        See Also
         --------
         write_object_array
         hdf5storage.Options.group_for_references
@@ -539,19 +539,19 @@ class LowLevelFile:
         return data_derefed
 
     def next_unused_ref_group_name(self: "LowLevelFile") -> str:
-        """Gives the next unused name that the references Group.
+        """Give the next unused name that the references Group.
 
         Generates the next unused name for use in the references
         Group. If the Group is full enough, there may be no available
         names meaning that this function will hang.
 
-        Returns:
+        Returns
         -------
         name : str
             A name that isn't already an existing Dataset or Group in
             the references Group.
 
-        See Also:
+        See Also
         --------
         hdf5storage.Options.group_for_references
 
@@ -645,7 +645,7 @@ def convert_dtype_to_str(dtype: np.dtype) -> str:
     can be passed through ``ast.literal_eval`` and then passed directly
     to the constructor of ``numpy.dtype`` to recreate `dtype`.
 
-    Warning:
+    Warning
     -------
     The output of this function is suitable for ``ast.literal_eval``,
     which is safe. **NEVER** use ``eval`` for this purpose because
@@ -656,17 +656,17 @@ def convert_dtype_to_str(dtype: np.dtype) -> str:
     dtype : numpy.dtype
         The dtype to convert
 
-    Returns:
+    Returns
     -------
     out : str
         The converted dtype. Can be passed through ``ast.literal_eval``.
 
-    Raises:
+    Raises
     ------
     TypeError
         If the argument is not the right type.
 
-    See Also:
+    See Also
     --------
     ast.literal_eval
 
@@ -681,7 +681,7 @@ def convert_dtype_to_str(dtype: np.dtype) -> str:
 
 
 def convert_numpy_str_to_uint16(data: np.str_ | np.ndarray) -> np.ndarray:
-    r"""Converts a ``numpy.str_`` to UTF-16 in numpy.uint16 form.
+    r"""Convert a ``numpy.str_`` to UTF-16 in numpy.uint16 form.
 
     Convert a ``numpy.str_`` or an array of them (they are UTF-32
     strings) to UTF-16 in the equivalent array of ``numpy.uint16``. The
@@ -696,17 +696,17 @@ def convert_numpy_str_to_uint16(data: np.str_ | np.ndarray) -> np.ndarray:
     data : numpy.unicode\_ or numpy.ndarray of numpy.unicode\_
         The string or array of them to convert.
 
-    Returns:
+    Returns
     -------
     array : numpy.ndarray of numpy.uint16
         The result of the conversion.
 
-    Raises:
+    Raises
     ------
     UnicodeEncodeError
         If a UTF-32 character has no UTF-16 representation.
 
-    See Also:
+    See Also
     --------
     convert_numpy_str_to_uint32
     convert_to_numpy_str
@@ -732,7 +732,7 @@ def convert_numpy_str_to_uint16(data: np.str_ | np.ndarray) -> np.ndarray:
 
 
 def convert_numpy_str_to_uint32(data: np.str_ | np.ndarray) -> np.ndarray:
-    r"""Converts ``numpy.str_`` to its numpy.uint32 representation.
+    r"""Convert ``numpy.str_`` to its numpy.uint32 representation.
 
     Convert a ``numpy.str_`` or an array of them (they are UTF-32
     strings) into the equivalent array of ``numpy.uint32`` that is byte
@@ -745,12 +745,12 @@ def convert_numpy_str_to_uint32(data: np.str_ | np.ndarray) -> np.ndarray:
     data : numpy.unicode\_ or numpy.ndarray of numpy.unicode\_
         The string or array of them to convert.
 
-    Returns:
+    Returns
     -------
     array : numpy.ndarray of numpy.uint32
         The result of the conversion.
 
-    See Also:
+    See Also
     --------
     convert_numpy_str_to_uint16
     convert_to_numpy_str
@@ -774,7 +774,7 @@ def convert_numpy_str_to_uint32(data: np.str_ | np.ndarray) -> np.ndarray:
 def convert_to_str(
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
 ) -> str:
-    r"""Decodes data to the ``str`` type.
+    r"""Decode data to the ``str`` type.
 
     Decodes `data` to a ``str``. Unsigned integers, Python ``bytes``,
     and Numpy strings (``numpy.str_`` and ``numpy.bytes_``) are
@@ -790,17 +790,17 @@ def convert_to_str(
     data : str-like or bytes-like or numpy.ndarray or numpy.unsignedinteger
         Data decode into an ``str`` string.
 
-    Returns:
+    Returns
     -------
     s : str
         The decoded `data`.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `data` is not the right type.
 
-    See Also:
+    See Also
     --------
     convert_to_numpy_str
     convert_to_numpy_bytes
@@ -846,7 +846,7 @@ def convert_to_numpy_str(
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
 ) -> Any:
-    r"""Decodes data to Numpy unicode string (``numpy.str_``).
+    r"""Decode data to Numpy unicode string (``numpy.str_``).
 
     Decodes `data` to Numpy unicode string (UTF-32), which is
     ``numpy.str_``, or an array of them. If it can't be decoded, it
@@ -882,18 +882,18 @@ def convert_to_numpy_str(
         ``None`` indicates the full amount for a 1d array or the number
         of columns (full length of row) for a higher dimension array.
 
-    Returns:
+    Returns
     -------
     s : numpy.unicode\_ or numpy.ndarray of numpy.unicode\_
         The `data` decoded into a ``numpy.str_`` or a
         ``numpy.ndarray`` of them.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `data` is not the right type.
 
-    See Also:
+    See Also
     --------
     convert_to_str
     convert_to_numpy_bytes
@@ -994,7 +994,7 @@ def convert_to_numpy_bytes(
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
 ) -> Any:
-    r"""Decodes data to Numpy UTF-8 econded string (``numpy.bytes_``).
+    r"""Decode data to Numpy UTF-8 econded string (``numpy.bytes_``).
 
     Decodes `data` to a Numpy UTF-8 encoded string, which is
     ``numpy.bytes_``, or an array of them in which case it will be ASCII
@@ -1028,18 +1028,18 @@ def convert_to_numpy_bytes(
         ``None`` indicates the full amount for a 1d array or the number
         of columns (full length of row) for a higher dimension array.
 
-    Returns:
+    Returns
     -------
     b : numpy.bytes\_ or numpy.ndarray of numpy.bytes\_
         The `data` decoded into a ``numpy.bytes_`` or a
         ``numpy.ndarray`` of them.
 
-    Raises:
+    Raises
     ------
     TypeError
         If `data` is not the right type.
 
-    See Also:
+    See Also
     --------
     convert_to_str
     convert_to_numpy_str
@@ -1152,7 +1152,7 @@ def decode_complex(
     data: np.ndarray | np.generic,
     complex_names: tuple[str | None, str | None] = (None, None),
 ) -> np.ndarray | np.generic:
-    """Decodes possibly complex data read from an HDF5 file.
+    """Decode possibly complex data read from an HDF5 file.
 
     Decodes possibly complex datasets read from an HDF5 file. HDF5
     doesn't have a native complex type, so they are stored as
@@ -1174,18 +1174,18 @@ def decode_complex(
         imaginary fields. A ``None`` indicates that various common
         field names should be tried.
 
-    Returns:
+    Returns
     -------
     c : decoded data or data
         If `data` can be decoded into a complex type, the decoded
         complex version is returned. Otherwise, `data` is returned
         unchanged.
 
-    See Also:
+    See Also
     --------
     encode_complex
 
-    Notes:
+    Notes
     -----
     Currently looks for real field names of ``('r', 're', 'real')`` and
     imaginary field names of ``('i', 'im', 'imag', 'imaginary')``
@@ -1244,7 +1244,7 @@ def encode_complex(
     data: np.ndarray | np.complexfloating,
     complex_names: tuple[str, str],
 ) -> np.ndarray | np.generic:
-    """Encodes complex data to having arbitrary complex field names.
+    """Encode complex data to having arbitrary complex field names.
 
     Encodes complex `data` to have the real and imaginary field names
     given in `complex_numbers`. This is needed because the field names
@@ -1261,13 +1261,13 @@ def encode_complex(
         ``tuple`` of the names to use (in order) for the real and
         imaginary fields.
 
-    Returns:
+    Returns
     -------
     d : encoded data
         `data` encoded into having the specified field names for the
         real and imaginary parts.
 
-    See Also:
+    See Also
     --------
     decode_complex
 
@@ -1297,7 +1297,7 @@ def convert_attribute_to_string(value: Any) -> str | None:
     value :
         The Attribute value.
 
-    Returns:
+    Returns
     -------
     s : str or None
         The ``str`` value of the attribute if the conversion is
@@ -1318,7 +1318,7 @@ def convert_attribute_to_string(value: Any) -> str | None:
 
 
 def convert_attribute_to_string_array(value: Any) -> list[str] | None:
-    """Converts an Attribute value to a string array.
+    """Convert an Attribute value to a string array.
 
     Converts the value of an Attribute to a string array if possible
     (get ``None`` if not).
@@ -1330,7 +1330,7 @@ def convert_attribute_to_string_array(value: Any) -> list[str] | None:
     value :
         The Attribute value.
 
-    Returns:
+    Returns
     -------
     array : list of str or None
         The converted string array value if possible, or ``None`` if it

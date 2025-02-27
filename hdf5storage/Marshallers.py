@@ -129,12 +129,12 @@ class TypeMarshaller:
        Instead of the file and options being passed to each method, a
        ``utilities.LowLevelFile`` is now passed instead.
 
-    Warning:
+    Warning
     -------
     Marshallers for version 0.1.x of this package are not compatible
     with version 0.2.x.
 
-    Attributes:
+    Attributes
     ----------
     required_parent_modules : tuple of str
         The parent modules required for reading types accurately.
@@ -161,7 +161,7 @@ class TypeMarshaller:
         and the matching entries in ``types`` as values. Set using
         ``update_type_lookups``.
 
-    See Also:
+    See Also
     --------
     hdf5storage.Options
     h5py.Dataset
@@ -278,7 +278,7 @@ class TypeMarshaller:
 
         .. versionadded:: 0.2
 
-        Notes:
+        Notes
         -----
         Subclasses need to call this function explicitly.
 
@@ -291,7 +291,7 @@ class TypeMarshaller:
         data: Any,
         type_string: str | None,
     ) -> str:
-        """Gets type string.
+        """Get type string.
 
         Finds the type string for 'data' contained in
         ``python_type_strings`` using its ``type``. Non-``None``
@@ -308,13 +308,13 @@ class TypeMarshaller:
             If it is a ``str``, it overrides any looked up type
             string. ``None`` means don't override.
 
-        Returns:
+        Returns
         -------
         str
             The type string associated with 'data'. Will be
             'type_string' if it is not ``None``.
 
-        Notes:
+        Notes
         -----
         Subclasses probably do not need to override this method.
 
@@ -322,10 +322,7 @@ class TypeMarshaller:
         if type_string is not None:
             return type_string
         tp: type[Any]
-        if isinstance(data, np.dtype):
-            tp = np.dtype
-        else:
-            tp = type(data)
+        tp = np.dtype if isinstance(data, np.dtype) else type(data)
         try:
             return self.type_to_typestring[tp]
         except KeyError:
@@ -339,7 +336,7 @@ class TypeMarshaller:
         data: Any,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
-        """Writes an object's metadata to file.
+        """Write an object's metadata to file.
 
         Writes the Python object 'data' to 'name' in h5py.Group 'grp'.
 
@@ -364,13 +361,13 @@ class TypeMarshaller:
             The type string for `data`. If it is ``None``, one will have
             to be gotten by ``get_type_string``.
 
-        Returns:
+        Returns
         -------
         obj : h5py.Dataset or h5py.Group or None
             The base Dataset or Group having the name `name` in `grp`
             that was made, or ``None`` if nothing was written.
 
-        Raises:
+        Raises
         ------
         NotImplementedError
             If writing 'data' to file is currently not supported.
@@ -379,12 +376,12 @@ class TypeMarshaller:
             `options.action_for_matlab_incompatible` is set to
             ``'error'``.
 
-        Notes:
+        Notes
         -----
         Must be overridden in a subclass because a
         ``NotImplementedError`` is thrown immediately.
 
-        See Also:
+        See Also
         --------
         hdf5storage.utilities.LowLevelFile.write_data
 
@@ -399,7 +396,7 @@ class TypeMarshaller:
         type_string: str | None,
         attributes: dict[str, tuple[str, Any]] | None = None,
     ) -> None:
-        """Writes an object to file.
+        """Write an object to file.
 
         Writes the metadata for a Python object `data` to file at `name`
         in h5py.Group `grp`. Metadata is written to HDF5
@@ -426,7 +423,7 @@ class TypeMarshaller:
             set. Valid kinds are ``'string_array'``, ``'string'``, and
             ``'value'``. Default is no Attributes to set (``None``).
 
-        Notes:
+        Notes
         -----
         The attribute 'Python.Type' is set to the type string. All H5PY
         Attributes not in ``python_attributes`` and/or
@@ -438,7 +435,7 @@ class TypeMarshaller:
         that the names of any additional HDF5 Attributes are put in the
         appropriate set.
 
-        See Also:
+        See Also
         --------
         utilities.set_attributes_all
 
@@ -481,22 +478,22 @@ class TypeMarshaller:
             All the Attributes of `dsetgrp` with their names as keys and
             their values as values.
 
-        Raises:
+        Raises
         ------
         NotImplementedError
             If reading the object from file is currently not supported.
 
-        Returns:
+        Returns
         -------
         data
             The Python object.
 
-        Notes:
+        Notes
         -----
         Must be overridden in a subclass because a
         ``NotImplementedError`` is thrown immediately.
 
-        See Also:
+        See Also
         --------
         read_approximate
         required_parent_modules
@@ -534,22 +531,22 @@ class TypeMarshaller:
             All the Attributes of `dsetgrp` with their names as keys and
             their values as values.
 
-        Raises:
+        Raises
         ------
         NotImplementedError
             If reading the object from file is currently not supported.
 
-        Returns:
+        Returns
         -------
         data
             The Python object.
 
-        Notes:
+        Notes
         -----
         Must be overridden in a subclass because a
         ``NotImplementedError`` is thrown immediately.
 
-        See Also:
+        See Also
         --------
         read
         required_parent_modules

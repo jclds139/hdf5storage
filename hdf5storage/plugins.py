@@ -37,7 +37,7 @@ def supported_marshaller_api_versions() -> tuple[str]:
 
     .. versionadded:: 0.2
 
-    Returns:
+    Returns
     -------
     versions : tuple
         The different versions of marshallers that are supported. Each
@@ -62,7 +62,7 @@ def find_thirdparty_marshaller_plugins() -> dict[str, dict[str, importlib.metada
 
     .. versionadded:: 0.2
 
-    Returns:
+    Returns
     -------
     plugins : dict
         The marshaller obtaining entry points from third party
@@ -71,7 +71,7 @@ def find_thirdparty_marshaller_plugins() -> dict[str, dict[str, importlib.metada
         names as the keys (``str``) and the values being the entry
         points (``pkg_resources.EntryPoint``).
 
-    See Also:
+    See Also
     --------
     supported_marshaller_api_versions
 
