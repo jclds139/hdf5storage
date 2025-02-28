@@ -38,7 +38,6 @@ from typing import Any
 
 import h5py
 import numpy as np
-from numpy.char import chararray
 
 import hdf5storage.exceptions
 
@@ -1022,7 +1021,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
             )
             if self._matrix_type_exists and isinstance(data, np.matrix):
                 container = "matrix"
-            elif isinstance(data, chararray):
+            elif isinstance(data, np.char.chararray):
                 container = "chararray"
             elif isinstance(data, np.recarray):
                 container = "recarray"
@@ -1399,7 +1398,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
             elif container == "ndarray" or (not self._matrix_type_exists and container == "matrix"):
                 data = np.asarray(data)
             elif container == "chararray":
-                data = data.view(chararray)
+                data = data.view(np.char.chararray)
             elif container == "matrix":
                 # We need to ignore deprecation warnings for the matrix
                 # type now that it is pending deprecation.

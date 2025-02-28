@@ -887,4 +887,4 @@ reference = "relativity"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11"
-content-hash = "e1c21b90ef7b768e04e9cc9f0816b84a537a541fef02765ac99a65dd9cc2bde9"
+content-hash = "03847a4ce19c4d12b436e7e10d0ffe91beebce04fe75a6ba792919e332002544"

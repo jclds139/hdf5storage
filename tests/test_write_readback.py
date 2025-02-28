@@ -404,8 +404,8 @@ def test_numpy_chararray_empty(fmt, num_chars):
     write_readback(fmt, data)
 
 
-@pytest.mark.parametrize("fmt", ["PythonMatlab", "Matlab"])
-def test_numpy_sized_dtype_nested_0_zero_shape_matlab(fmt):
+@pytest.mark.parametrize(("fmt", "zero_shaped"), [(fmt, z) for fmt in fmts for z in (True, False)])
+def test_numpy_sized_dtype_nested_0(fmt, zero_shaped):
     dtypes = (
         "uint8",
         "uint16",
@@ -421,53 +421,7 @@ def test_numpy_sized_dtype_nested_0_zero_shape_matlab(fmt):
         "complex128",
     )
     for dtype in dtypes:
-        dt = (dtype, (2, 0))
-        data = np.zeros((2,), dtype=dt)
-        with pytest.raises(hdf5storage.exceptions.TypeNotMatlabCompatibleError):
-            write_readback(fmt, data)
-
-
-@pytest.mark.parametrize("fmt", ["Python", "None"])
-def test_numpy_sized_dtype_nested_0_zero_shape_python(fmt):
-    dtypes = (
-        "uint8",
-        "uint16",
-        "uint32",
-        "uint64",
-        "int8",
-        "int16",
-        "int32",
-        "int64",
-        "float32",
-        "float64",
-        "complex64",
-        "complex128",
-    )
-    for dtype in dtypes:
-        dt = (dtype, (2, 0))
-        data = np.zeros((2,), dtype=dt)
-        with pytest.raises(ValueError, match=r"size must be positive"):
-            write_readback(fmt, data)
-
-
-@pytest.mark.parametrize("fmt", fmts)
-def test_numpy_sized_dtype_nested_0(fmt):
-    dtypes = (
-        "uint8",
-        "uint16",
-        "uint32",
-        "uint64",
-        "int8",
-        "int16",
-        "int32",
-        "int64",
-        "float32",
-        "float64",
-        "complex64",
-        "complex128",
-    )
-    for dtype in dtypes:
-        dt = (dtype, (2, 2))
+        dt = (dtype, (2, 2 * zero_shaped))
         data = np.zeros((2,), dtype=dt)
         write_readback(fmt, data)
 
