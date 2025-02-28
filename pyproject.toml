@@ -64,12 +64,11 @@ lint.unfixable = [
 "tests/**/*.py" = [
     "ANN201", # Allow no return types in tests.
     "S101",   # Allow asserts in tests.
-]
-"tests/**/__init__.py" = [
-    "D104", # Don't require docstrings in tests.
-]
-"*/scripts/**/__init__.py" = [
-    "D104", # Don't require docstrings in scripts.
+    "D100",   # Don't require docstring in test modules
+    "D103",   # Don't require docstring in test functions
+    "D104",   # Don't require docstrings in test packages.
+    "ANN001", # Allow no function argument type annotations
+    "INP001", # Do not require __init__.py module
 ]
 "docs/**/__init__.py" = [
     "D104", # Don't require docstrings in documentation.
