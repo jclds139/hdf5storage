@@ -3,14 +3,13 @@ name: unit-tests
 on:
   push:
     branches:
-      - main
+      - numpy2
     paths-ignore:
       - 'docs/**'
       - 'MANIFEST.in'
       - 'README.rst'
       - 'THANKS.rst'
       - 'COPYING.txt'
-      - 'requirements**.txt'
       - '.gitignore'
       - '.gitattributes'
 
@@ -20,34 +19,16 @@ jobs:
     strategy:
       matrix:
         python-version:
-          - '3.10'
           - '3.11'
         h5py-version:
-          - '3.6'
-          - '3.7'
-        include:
-          - python-version: '3.7'
-            h5py-version: '3.3'
-          - python-version: '3.7'
-            h5py-version: '3.4'
-          - python-version: '3.7'
-            h5py-version: '3.5'
-          - python-version: '3.7'
-            h5py-version: '3.6'
-          - python-version: '3.7'
-            h5py-version: '3.7'
-          - python-version: '3.9'
-            h5py-version: '3.4'
-          - python-version: '3.9'
-            h5py-version: '3.5'
-          - python-version: '3.9'
-            h5py-version: '3.6'
-          - python-version: '3.9'
-            h5py-version: '3.7'
+          - '3.13'
+        numpy-version:
+          - '>=1.26,<2.0'
+          - '>=2.0'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
         cache: "pip"
@@ -58,14 +39,12 @@ jobs:
     - name: Install Python dependencies including h5py ${{ matrix.h5py-version }}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
+        NUMPY_VERSION: ${{ matrix.numpy-version}}
       run: |
-        python -m pip install -U numpy Cython
+        python -m pip install numpy$NUMPY_VERSION
         python -m pip install h5py==$H5PY_VERSION
-        python -m pip install -r requirements_tests.txt
+        python -m pip install pytest
         python -m pip install .
-    - name: Install Example Plugin Package
-      run: |
-        python -m pip install -e examples/example_hdf5storage_marshaller_plugin
     - name: Test with pytest
       run: |
-        pytest
+        pytest tests
