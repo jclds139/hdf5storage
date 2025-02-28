@@ -421,8 +421,7 @@ def test_numpy_sized_dtype_nested_0(fmt, zero_shaped):
         "complex128",
     )
     for dtype in dtypes:
-        dt = (dtype, (2, 2 * zero_shaped))
-        data = np.zeros((2,), dtype=dt)
+        data = np.zeros(shape=(2, 2, 2 * zero_shaped), dtype=dtype)
         write_readback(fmt, data)
 
 
