@@ -145,7 +145,7 @@ class Options:
         See Attributes.
     marshaller_collection : MarshallerCollection, optional
         See Attributes.
-    **keywords :
+    **keywords : dict, optional
         Additional keyword arguments. They are ignored. They are allowed
         to be given to be more compatible with future versions of this
         package where more options will be added.
@@ -207,7 +207,7 @@ class Options:
         compressed_fletcher32_filter: bool = True,
         uncompressed_fletcher32_filter: bool = False,
         marshaller_collection: Optional["MarshallerCollection"] = None,
-        **keywords: Any,
+        **keywords: dict,  # noqa: ARG002
     ) -> None:
         # Set the defaults.
 
@@ -1199,7 +1199,7 @@ class MarshallerCollection:
                 for name in m.required_parent_modules:
                     if name not in sys.modules and pkgutil.find_loader(name) is None:
                         msg = "module not present"
-                        raise ImportError(msg)
+                        raise ImportError(msg)  # noqa: TRY301
             except ImportError:
                 self._has_required_modules[i] = False
             else:
@@ -1217,7 +1217,7 @@ class MarshallerCollection:
                 for name in m.required_modules:
                     if name not in sys.modules:
                         msg = "module not loaded yet."
-                        raise ImportError(msg)
+                        raise ImportError(msg)  # noqa: TRY301
             except ImportError:
                 if self._lazy_loading:
                     self._imported_required_modules[i] = False
@@ -1573,7 +1573,7 @@ class File(collections.abc.MutableMapping):
         The options to use when reading and/or writing. Is mutually
         exclusive with any additional keyword arguments given (set to
         ``None`` or don't provide the argument at all to use them).
-    **keywords :
+    **keywords : dict, optional
         If `options` was not provided or was ``None``, these are used as
         arguments to make a ``Options``.
 
@@ -1599,14 +1599,14 @@ class File(collections.abc.MutableMapping):
 
     """
 
-    def __init__(
+    def __init__(  # noqa: C901, PLR0912
         self: "File",
         filename: str = "data.h5",
         writable: bool = False,
         truncate_existing: bool = False,
         truncate_invalid_matlab: bool = False,
         options: Options | None = None,
-        **keywords: Any,
+        **keywords: dict,
     ) -> None:
         # Before we do anything else, we need to make the attributes for
         # the file handle, the options, and a lock. This way, these
@@ -1662,7 +1662,7 @@ class File(collections.abc.MutableMapping):
             # allocated (smallest size is 512) for future use (after
             # all, someone might want to turn it to a .mat file later
             # and need it and it is only 512 bytes).
-            if truncate_existing or not os.path.isfile(filename):
+            if truncate_existing or not os.path.isfile(filename):  # noqa: PTH113
                 self._file = h5py.File(filename, mode="w", userblock_size=512)
             else:
                 self._file = h5py.File(filename, mode="a")
@@ -1677,7 +1677,7 @@ class File(collections.abc.MutableMapping):
                 self._file.close()
                 self._file = None
                 # Get the time.
-                now = datetime.datetime.utcnow()
+                now = datetime.datetime.now(tz=datetime.UTC)
                 # Construct the leading string. The MATLAB one looks
                 # like
                 #
@@ -1721,7 +1721,7 @@ class File(collections.abc.MutableMapping):
                 # that MATLAB uses.
                 b.extend(bytearray.fromhex("00000000 00000000 0002494D"))
                 # Now, write it to the beginning of the file.
-                with open(filename, "r+b") as f:
+                with open(filename, "r+b") as f:  # noqa: PTH123
                     f.write(b)
                 # Done writing the userblock, so we can re-open the
                 # file.
@@ -1779,7 +1779,7 @@ class File(collections.abc.MutableMapping):
             if self._writable:
                 self._file.flush()
 
-    def write(self: "File", data: Any, path: pathesc.Path = "/") -> None:
+    def write(self: "File", data: object, path: pathesc.Path = "/") -> None:
         """Write one piece of data into the file.
 
         A wrapper around the ``writes`` method to write a single piece
@@ -1787,7 +1787,7 @@ class File(collections.abc.MutableMapping):
 
         Parameters
         ----------
-        data : any
+        data : object
             The python object to write.
         path : str or bytes pathlib.PurePath or Iterable, optional
             The path to write the data to.  ``str`` and ``bytes`` paths
@@ -1899,7 +1899,7 @@ class File(collections.abc.MutableMapping):
                     None,
                 )
 
-    def read(self: "File", path: pathesc.Path = "/") -> Any:
+    def read(self: "File", path: pathesc.Path = "/") -> object:
         """Read one piece of data from the file.
 
         A wrapper around the ``reads`` method to read a single piece of
@@ -1913,7 +1913,7 @@ class File(collections.abc.MutableMapping):
 
         Returns
         -------
-        data : any
+        data : object
             The data that is read.
 
         Raises
@@ -2039,7 +2039,7 @@ class File(collections.abc.MutableMapping):
                 return length - 1
             return length
 
-    def __contains__(self: "File", path: Any) -> bool:
+    def __contains__(self: "File", path: pathesc.Path) -> bool:
         """Check if an object exists at the specified `path`.
 
         Parameters
@@ -2106,7 +2106,7 @@ class File(collections.abc.MutableMapping):
                 return itertools.dropwhile(lambda k: k == refgrp, it)
             return it
 
-    def __getitem__(self: "File", path: pathesc.Path) -> Any:
+    def __getitem__(self: "File", path: pathesc.Path) -> object:
         """Read the object at the specified `path` from the file.
 
         A wrapper around the ``reads`` method to read a single piece of
@@ -2120,7 +2120,7 @@ class File(collections.abc.MutableMapping):
 
         Returns
         -------
-        data : any
+        data : object
             The data that is read.
 
         Raises
@@ -2139,7 +2139,7 @@ class File(collections.abc.MutableMapping):
         """
         return self.reads((path,))[0]
 
-    def __setitem__(self: "File", path: pathesc.Path, data: Any) -> None:
+    def __setitem__(self: "File", path: pathesc.Path, data: object) -> None:
         """Write one piece of data into the file.
 
         A wrapper around the ``writes`` method to write a single piece
@@ -2152,7 +2152,7 @@ class File(collections.abc.MutableMapping):
             must be POSIX style. The directory name is the Group to put
             it in and the basename is the Dataset/Group name to write it
             to.
-        data : any
+        data : object
             The python object to write.
 
         Raises
@@ -2176,7 +2176,7 @@ class File(collections.abc.MutableMapping):
         self.writes({path: data})
 
     def __delitem__(self: "File", path: pathesc.Path) -> None:
-        """Deletes one path from the file.
+        """Delete one path from the file.
 
         Deletes one location from the file specified by `path`.
 
@@ -2213,7 +2213,7 @@ class File(collections.abc.MutableMapping):
             del self._file[posixpath.join(groupname, targetname)]
 
 
-def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
+def writes(mdict: Mapping[pathesc.Path, object], **keywords: dict) -> None:
     """Write data into an HDF5 file.
 
     Wrapper around ``File`` and ``File.writes``. Specifically, this
@@ -2230,7 +2230,7 @@ def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
         and ``bytes`` paths must be POSIX style) where the directory
         name is the Group to put it in and the basename is the name to
         write it to. The values are the data to write.
-    **keywords :
+    **keywords : dict, optional
         Extra keyword arguments to pass to ``File``.
 
     Raises
@@ -2259,7 +2259,7 @@ def writes(mdict: Mapping[pathesc.Path, Any], **keywords: Any) -> None:
         f.writes(mdict)
 
 
-def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
+def write(data: object, path: pathesc.Path = "/", **keywords: dict) -> None:
     """Write one piece of data into an HDF5 file.
 
     Wrapper around ``File`` and ``File.write``. Specifically, this
@@ -2270,7 +2270,7 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
 
     Parameters
     ----------
-    data : any
+    data : object
         The python object to write.
     path : str or bytes or pathlib.PurePath or Iterable, optional
         The path to write the data to. ``str`` and ``bytes`` paths must
@@ -2279,11 +2279,6 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
         ``'/'``.
     **keywords :
         Extra keyword arguments to pass to ``File``.
-
-    Returns
-    -------
-    data : any
-        The data that is read.
 
     Raises
     ------
@@ -2311,7 +2306,7 @@ def write(data: Any, path: pathesc.Path = "/", **keywords: Any) -> Any:
         f.write(data, path)
 
 
-def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
+def reads(paths: Iterable[pathesc.Path], **keywords: dict) -> list[object]:
     """Read pieces of data from an HDF5 file.
 
     Wrapper around ``File`` and ``File.reads`` with the exception that
@@ -2332,7 +2327,7 @@ def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
     paths : Iterable
         An iterable of paths to read data from. ``str`` and ``bytes``
         paths must be POSIX style.
-    **keywords :
+    **keywords : dict, optional
         Extra keyword arguments to pass to ``File``.
 
     Returns
@@ -2369,7 +2364,7 @@ def reads(paths: Iterable[pathesc.Path], **keywords: Any) -> list[Any]:
         return f.reads(paths)
 
 
-def read(path: pathesc.Path = "/", **keywords: Any) -> Any:
+def read(path: pathesc.Path = "/", **keywords: dict) -> object:
     """Read one piece of data from an HDF5 file.
 
     Wrapper around ``File`` and ``File.reads`` with the exception that
@@ -2390,8 +2385,13 @@ def read(path: pathesc.Path = "/", **keywords: Any) -> Any:
     path : str or bytes or pathlib.PurePath or Iterable, optional
         The path to read from. ``str`` and ``bytes`` paths must be POSIX
         style. The default is ``'/'``.
-    **keywords :
+    **keywords : dict, optional
         Extra keyword arguments to pass to ``File``.
+
+    Returns
+    -------
+    data: object
+        The data that is read.
 
     Raises
     ------
@@ -2426,14 +2426,14 @@ def savemat(  # noqa: PLR0913
     file_name: str,
     mdict: Mapping[pathesc.Path, Any],
     appendmat: bool = True,
-    format: MatfileFormat = "7.3",
+    fmt: MatfileFormat = "7.3",
     oned_as: OnedAs = "row",
     store_python_metadata: bool = True,
     action_for_matlab_incompatible: ActionMatlabIncompatible = "error",
     marshaller_collection: MarshallerCollection | None = None,
     truncate_existing: bool = False,
     truncate_invalid_matlab: bool = False,
-    **keywords: Any,
+    **keywords: dict,
 ) -> None:
     """Save a dictionary of python objects to a MATLAB MAT file.
 
@@ -2459,7 +2459,7 @@ def savemat(  # noqa: PLR0913
     appendmat : bool, optional
         Whether to append the '.mat' extension to `file_name` if it
         doesn't already end in it or not.
-    format : {'4', '5', '7.3'}, optional
+    fmt : {'4', '5', '7.3'}, optional
         The MATLAB mat file format to use. The '7.3' format is handled
         by this package while the '4' and '5' formats are dispatched to
         SciPy.
@@ -2484,7 +2484,7 @@ def savemat(  # noqa: PLR0913
         Whether to truncate a file if the file doesn't have the proper
         header (userblock in HDF5 terms) setup for MATLAB metadata to be
         placed.
-    **keywords :
+    **keywords : dict, optional
         Additional keywords arguments to be passed onto
         ``scipy.io.savemat`` if dispatching to SciPy (`format` < 7.3).
 
@@ -2518,12 +2518,12 @@ def savemat(  # noqa: PLR0913
     # If format is a number less than 7.3, the call needs to be
     # dispatched to the scipy version, if it is available, with all the
     # relevant and extra keywords options provided.
-    if float(format) < 7.3:
+    if float(fmt) < 7.3:
         importlib.import_module("scipy.io").savemat(
             file_name,
             mdict,
             appendmat=appendmat,
-            format=format,
+            format=fmt,
             oned_as=oned_as,
             **keywords,
         )
@@ -2556,14 +2556,14 @@ def savemat(  # noqa: PLR0913
     )
 
 
-def loadmat(  # noqa: PLR0913
+def loadmat(  # noqa: C901, PLR0912, PLR0913
     file_name: str,
     mdict: dict[Any, Any] | None = None,
     appendmat: bool = True,
     variable_names: Sequence[pathesc.Path] | None = None,
     marshaller_collection: MarshallerCollection | None = None,
     options: Options | None = None,
-    **keywords: Any,
+    **keywords: dict,
 ) -> dict[Any, Any]:
     """Load data from a MATLAB MAT file.
 
@@ -2608,7 +2608,7 @@ def loadmat(  # noqa: PLR0913
         use the default. If passed, it overrides the
         `marshaller_collection` argument. Only applicable if not
         dispatching to SciPy (version 7.3 and newer files).
-    **keywords :
+    **keywords : dict, optional
         Additional keywords arguments to be passed onto
         ``scipy.io.loadmat`` if dispatching to SciPy if the file is not
         a version 7.3 or later format.
@@ -2683,7 +2683,6 @@ def loadmat(  # noqa: PLR0913
             mdict = data
         for k, v in data.items():
             mdict[k] = v
-        return mdict
     except OSError:
         return importlib.import_module("scipy.io").loadmat(
             file_name,
@@ -2692,10 +2691,12 @@ def loadmat(  # noqa: PLR0913
             variable_names=variable_names,
             **keywords,
         )
+    else:
+        return mdict
 
 
 def get_default_marshaller_collection() -> MarshallerCollection:
-    """Gets the default MarshallerCollection.
+    """Get the default MarshallerCollection.
 
     The initial default only includes the builtin marshallers in the
     ``Marshallers`` submodule.
@@ -2719,8 +2720,8 @@ def get_default_marshaller_collection() -> MarshallerCollection:
     return _default_marshaller_collection[0]
 
 
-def make_new_default_marshaller_collection(*args: Any, **keywords: Any) -> None:
-    """Makes a new default MarshallerCollection.
+def make_new_default_marshaller_collection(*args: tuple, **keywords: dict) -> None:
+    """Make a new default MarshallerCollection.
 
     Replaces the current default ``MarshallerCollection`` with a new
     one.
