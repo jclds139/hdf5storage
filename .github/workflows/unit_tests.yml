@@ -36,7 +36,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install Python dependencies including h5py ${{ matrix.h5py-version }}
+    - name: Install Python dependencies including h5py ${{ matrix.h5py-version }} and NumPy ${{matrix.numpy-version}}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
         NUMPY_VERSION: ${{ matrix.numpy-version}}
