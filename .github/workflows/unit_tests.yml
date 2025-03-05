@@ -24,21 +24,21 @@ jobs:
           - '3.11'
           - '3.13'
         h5py-version:
-          - '3.12'
-          - '3.133.14'
+          - '==3.12'
+          - '==3.13'
         numpy-version:
           - '>=1.26,<2.0'
-          - '2.0'
-          - '2.2'
+          - '==2.0'
+          - '==2.2'
         include:
           - os: 'ubuntu-24.04'
             python-version: '3.9'
-            h5py-version: '3.11'
-            numpy-version: '1.26'
+            h5py-version: '==3.11'
+            numpy-version: '==1.26'
           - os: 'ubuntu-24.04'
             python-version: '3.9'
-            h5py-version: '3.11'
-            numpy-version: '2'
+            h5py-version: '==3.11'
+            numpy-version: '==2.2'
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
