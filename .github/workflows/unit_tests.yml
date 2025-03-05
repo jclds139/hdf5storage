@@ -55,6 +55,14 @@ jobs:
             python-version: '3.11'
             h5py-version: '>=3.10,<3.11'
             numpy-version: ''
+          - os: 'ubuntu-24.04' # there are no h5py 3.9 binaries for Python 3.13 or 3.12
+            python-version: '3.11'
+            h5py-version: '>=3.9,<3.10'
+            numpy-version: ''
+          - os: 'windows-2022' # there are no h5py 3.9 binaries for Python 3.13 or 3.12
+            python-version: '3.11'
+            h5py-version: '>=3.9,<3.10'
+            numpy-version: ''
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
