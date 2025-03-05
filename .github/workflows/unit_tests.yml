@@ -51,6 +51,7 @@ jobs:
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
         NUMPY_VERSION: ${{ matrix.numpy-version}}
+      shell: bash
       run: |
         python -m pip install numpy$NUMPY_VERSION h5py$H5PY_VERSION pytest
         python -m pip install .
