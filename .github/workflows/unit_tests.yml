@@ -28,7 +28,7 @@ jobs:
           - '>=3.12,<3.13'
           - ''
         numpy-version:
-          - '>=2.0,<2.1'
+          - '>=2.1,<2.2'
           - ''
         include:
           - os: 'ubuntu-24.04' # There are no NumPy 1.26 binaries for Python 3.13
@@ -46,6 +46,14 @@ jobs:
           - os: 'windows-2022' # there are no h5py 3.11 binaries for Python 3.13
             python-version: '3.11'
             h5py-version: '>=3.11,<3.12'
+            numpy-version: ''
+          - os: 'ubuntu-24.04' # there are no h5py 3.10 binaries for Python 3.13
+            python-version: '3.11'
+            h5py-version: '>=3.10,<3.11'
+            numpy-version: ''
+          - os: 'windows-2022' # there are no h5py 3.10 binaries for Python 3.13
+            python-version: '3.11'
+            h5py-version: '>=3.10,<3.11'
             numpy-version: ''
     runs-on: ${{ matrix.os }}
     steps:
