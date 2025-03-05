@@ -22,23 +22,31 @@ jobs:
           - 'windows-2022'
         python-version:
           - '3.11'
+          - '3.12'
           - '3.13'
         h5py-version:
           - '>=3.12,<3.13'
-          - '>=3.13,<3.14'
+          - ''
         numpy-version:
-          - '>=1.26,<2.0'
           - '>=2.0,<2.1'
-          - '>=2.2,<2.3'
+          - ''
         include:
-          - os: 'ubuntu-24.04' # there are no h5py 3.11 binaries for Python 3.13
+          - os: 'ubuntu-24.04' # There are no NumPy 1.26 binaries for Python 3.13
             python-version: '3.11'
-            h5py-version: '>=3.11,<3.12'
+            h5py-version: ''
+            numpy-version: '>=1.26,<2.0'
+          - os: 'windows-2022' # There are no NumPy 1.26 binaries for Python 3.13
+            python-version: '3.11'
+            h5py-version: ''
             numpy-version: '>=1.26,<2.0'
           - os: 'ubuntu-24.04' # there are no h5py 3.11 binaries for Python 3.13
             python-version: '3.11'
             h5py-version: '>=3.11,<3.12'
-            numpy-version: '>=2.2,<2.3'
+            numpy-version: ''
+          - os: 'windows-2022' # there are no h5py 3.11 binaries for Python 3.13
+            python-version: '3.11'
+            h5py-version: '>=3.11,<3.12'
+            numpy-version: ''
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
