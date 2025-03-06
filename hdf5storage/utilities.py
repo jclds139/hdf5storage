@@ -210,7 +210,7 @@ class LowLevelFile:
         self: "LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         """Write a piece of data into the file in the given group.
@@ -224,7 +224,7 @@ class LowLevelFile:
             The Group to place the data in.
         name : str
             The name to write the data to.
-        data : any
+        data : object
             The data to write.
         type_string : str or None
             The type string of the data, or ``None`` to deduce
@@ -269,12 +269,12 @@ class LowLevelFile:
             return m.write(self, grp, name, data, type_string)
         raise NotImplementedError("Can't write data type: " + str(tp))
 
-    def read_data(
+    def read_data(  # noqa: C901
         self: "LowLevelFile",
         grp: h5py.Group | None,
         name: str | None,
         dsetgrp: h5py.Dataset | h5py.Group | None = None,
-    ) -> Any:
+    ) -> object:
         """Write a piece of data into the file.
 
         Low level method to read a Python type of the specified name
@@ -295,7 +295,7 @@ class LowLevelFile:
 
         Returns
         -------
-        data
+        data : object
             The data named `name` in Group `grp`.
 
         Raises
@@ -370,7 +370,7 @@ class LowLevelFile:
             return m.read_approximate(self, dsetgrp, attributes)
         raise hdf5storage.exceptions.CantReadError("Could not read " + dsetgrp.name)
 
-    def write_object_array(
+    def write_object_array(  # noqa: C901, PLR0912
         self: "LowLevelFile",
         data: np.ndarray,
     ) -> np.ndarray | h5py.Reference:
@@ -538,7 +538,7 @@ class LowLevelFile:
             data_derefed_flat[index] = self.read_data(None, None, dsetgrp=self._f[x])
         return data_derefed
 
-    def next_unused_ref_group_name(self: "LowLevelFile") -> str:
+    def next_unused_ref_group_name(self: "LowLevelFile") -> str:  # noqa: C901
         """Give the next unused name that the references Group.
 
         Generates the next unused name for use in the references
@@ -771,7 +771,7 @@ def convert_numpy_str_to_uint32(data: np.str_ | np.ndarray) -> np.ndarray:
     return data.ravel().view(np.uint32).reshape(tuple(shape))
 
 
-def convert_to_str(
+def convert_to_str(  # noqa: C901, PLR0911
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
 ) -> str:
     r"""Decode data to the ``str`` type.
@@ -842,10 +842,10 @@ def convert_to_str(
     raise TypeError(msg)
 
 
-def convert_to_numpy_str(
+def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
-) -> Any:
+) -> np.ndarray | np.str_:
     r"""Decode data to Numpy unicode string (``numpy.str_``).
 
     Decodes `data` to Numpy unicode string (UTF-32), which is
@@ -884,7 +884,7 @@ def convert_to_numpy_str(
 
     Returns
     -------
-    s : numpy.unicode\_ or numpy.ndarray of numpy.unicode\_
+    s : numpy.str\_ or numpy.ndarray of numpy.str\_
         The `data` decoded into a ``numpy.str_`` or a
         ``numpy.ndarray`` of them.
 
@@ -990,10 +990,10 @@ def convert_to_numpy_str(
     raise TypeError(msg)
 
 
-def convert_to_numpy_bytes(
+def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
-) -> Any:
+) -> np.ndarray | np.bytes_:
     r"""Decode data to Numpy UTF-8 econded string (``numpy.bytes_``).
 
     Decodes `data` to a Numpy UTF-8 encoded string, which is
@@ -1284,7 +1284,7 @@ def encode_complex(
     return data.view([(complex_names[0], dtype_name), (complex_names[1], dtype_name)])
 
 
-def convert_attribute_to_string(value: Any) -> str | None:
+def convert_attribute_to_string(value: object) -> str | None:
     """Convert an attribute value to a string.
 
     Converts the attribute value to a string if possible (get ``None``
@@ -1294,7 +1294,7 @@ def convert_attribute_to_string(value: Any) -> str | None:
 
     Parameters
     ----------
-    value :
+    value : object
         The Attribute value.
 
     Returns
@@ -1317,7 +1317,7 @@ def convert_attribute_to_string(value: Any) -> str | None:
     return None
 
 
-def convert_attribute_to_string_array(value: Any) -> list[str] | None:
+def convert_attribute_to_string_array(value: object) -> list[str] | None:
     """Convert an Attribute value to a string array.
 
     Converts the value of an Attribute to a string array if possible
@@ -1327,7 +1327,7 @@ def convert_attribute_to_string_array(value: Any) -> list[str] | None:
 
     Parameters
     ----------
-    value :
+    value : object
         The Attribute value.
 
     Returns
@@ -1392,7 +1392,7 @@ def set_attributes_all(
                 try:
                     if val.dtype == existing[k].dtype and val.shape == existing[k].shape:
                         attrs.modify(k, val)
-                except:
+                except:  # noqa: E722
                     attrs.create(k, val)
     # Discard all other attributes.
     if discard_others:

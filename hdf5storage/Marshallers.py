@@ -287,7 +287,7 @@ class TypeMarshaller:
 
     def get_type_string(
         self: "TypeMarshaller",
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> str:
         """Get type string.
@@ -332,7 +332,7 @@ class TypeMarshaller:
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         """Write an object's metadata to file.
@@ -391,7 +391,7 @@ class TypeMarshaller:
         self: "TypeMarshaller",
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
-        data: Any,
+        data: object,
         type_string: str | None,
         attributes: dict[str, tuple[str, Any]] | None = None,
     ) -> None:
@@ -454,7 +454,7 @@ class TypeMarshaller:
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         """Read a Python object from file.
 
         Reads the data at `dsetgrp` and converts it to a Python object
@@ -507,7 +507,7 @@ class TypeMarshaller:
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         """Read a Python object approximately from file.
 
         Reads the data at `dsetgrp` and returns an approximation of it
@@ -696,7 +696,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # Start with an emtpy attributes.
@@ -971,7 +971,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
                     dsetgrp = grp.create_dataset(name, data=data_to_store, **filters)
                 else:
                     dsetgrp[...] = data_to_store
-            except:
+            except:  # noqa: E722
                 dsetgrp = grp.create_dataset(name, data=data_to_store, **filters)
 
         # Write the metadata using the inherited function (good enough).
@@ -989,7 +989,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
         self: "NumpyScalarArrayMarshaller",
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
-        data: Any,
+        data: object,
         type_string: str | None,
         attributes: dict[str, tuple[str, Any]] | None = None,
         wrote_as_struct: bool = False,
@@ -1122,7 +1122,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         dset = dsetgrp
 
         # Get the different attributes this marshaller uses.
@@ -1250,7 +1250,7 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
                         if dt != x.dtype or sp != x.shape:
                             all_same = False
                             break
-                except:
+                except:  # noqa: E722
                     all_same = False
 
                 # If they are all the same, then dt and shape should be
@@ -1483,8 +1483,8 @@ class NumpyDtypeMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
-        type_string: str | None,
+        data: object,
+        type_string: str | None,  # noqa: ARG002
     ) -> h5py.Dataset | h5py.Group | None:
         # Pass it to the parent version of this function to write
         # it. The proper type_string needs to be grabbed now as the
@@ -1507,7 +1507,7 @@ class NumpyDtypeMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work, convert to str, evaluate the literal (using
         # ast.literal_eval instead of the dangerous eval), and passing
@@ -1542,7 +1542,7 @@ class PythonScalarMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to the appropriate numpy
@@ -1560,7 +1560,9 @@ class PythonScalarMarshaller(NumpyScalarArrayMarshaller):
         # function will have a modified form of data to guess from if
         # not given the right one explicitly.
         out: Any
-        if type(data) == int:
+        # Note: isinstance(data, int) returns True if data is a Python bool
+        #       type(data) == int returns False if data is a Python bool
+        if type(data) == int:  # noqa: E721
             try:
                 out = np.int64(data)
             except OverflowError:
@@ -1581,7 +1583,7 @@ class PythonScalarMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = NumpyScalarArrayMarshaller.read(self, f, dsetgrp, attributes)
@@ -1614,16 +1616,13 @@ class PythonStringMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to a numpy string of the
         # appropriate type (str to np.str_ and the others to np.bytes_).
         cdata: np.str_ | np.bytes_
-        if isinstance(data, str):
-            cdata = np.str_(data)
-        else:
-            cdata = np.bytes_(data)
+        cdata = np.str_(data) if isinstance(data, str) else np.bytes_(data)
 
         # Now pass it to the parent version of this function to write
         # it. The proper type_string needs to be grabbed now as the
@@ -1643,7 +1642,7 @@ class PythonStringMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = NumpyScalarArrayMarshaller.read(self, f, dsetgrp, attributes)
@@ -1680,7 +1679,7 @@ class PythonNoneEllipsisNotImplementedMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # Just going to use the parent function with an empty double
@@ -1698,10 +1697,10 @@ class PythonNoneEllipsisNotImplementedMarshaller(NumpyScalarArrayMarshaller):
 
     def read(
         self: "PythonNoneEllipsisNotImplementedMarshaller",
-        f: "hdf5storage.utilities.LowLevelFile",
-        dsetgrp: h5py.Dataset | h5py.Group,
+        f: "hdf5storage.utilities.LowLevelFile",  # noqa: ARG002
+        dsetgrp: h5py.Dataset | h5py.Group,  # noqa: ARG002
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # The type string can be used to look up the type, which can be
         # called to produce an instance.
         type_string = convert_attribute_to_string(attributes["Python.Type"])
@@ -1736,7 +1735,7 @@ class PythonDictMarshaller(TypeMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # Check to see if any fields are not string like, or if they are
@@ -1762,7 +1761,7 @@ class PythonDictMarshaller(TypeMarshaller):
                 field_str = escape_path(convert_to_str(field))
                 keys_as_str.append(field_str)
                 key_str_types.append(tps[type(field)])
-            except:
+            except:  # noqa: E722
                 any_non_valid_str_keys = True
                 break
 
@@ -1830,7 +1829,7 @@ class PythonDictMarshaller(TypeMarshaller):
         self: "PythonDictMarshaller",
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
-        data: Any,
+        data: object,
         type_string: str | None,
         attributes: dict[str, tuple[str, Any]] | None = None,
         any_non_valid_str_keys: bool = True,
@@ -1910,12 +1909,13 @@ class PythonDictMarshaller(TypeMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         grp2 = dsetgrp
         # If name is not present or is not a Group, then we can't read
         # it and have to throw an error.
         if not isinstance(grp2, h5py.Group):
-            raise NotImplementedError("Not a Group.")
+            msg = "Not a Group."
+            raise NotImplementedError(msg)
 
         # Get the different attributes this marshaller uses.
 
@@ -2036,7 +2036,7 @@ class PythonCounterMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = PythonDictMarshaller.read(self, f, dsetgrp, attributes)
@@ -2066,7 +2066,7 @@ class PythonSliceRangeMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to a dict and then pass it to
@@ -2088,7 +2088,7 @@ class PythonSliceRangeMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = PythonDictMarshaller.read(self, f, dsetgrp, attributes)
@@ -2138,7 +2138,7 @@ class PythonDatetimeObjsMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to a dict and then pass it to
@@ -2167,12 +2167,9 @@ class PythonDatetimeObjsMarshaller(PythonDictMarshaller):
         }
         if type(data) in attrs:
             cdata = {k: getattr(data, k) for k in attrs[type(data)]}
-        elif type(data) == datetime.timezone:
+        elif isinstance(data, datetime.timezone):
             parts = data.__reduce__()[1]
-            if len(parts) == 1:
-                cdata = {"offset": parts[0]}
-            else:
-                cdata = {"offset": parts[0], "name": parts[1]}
+            cdata = {"offset": parts[0]} if len(parts) == 1 else {"offset": parts[0], "name": parts[1]}
         return PythonDictMarshaller.write(
             self,
             f,
@@ -2187,7 +2184,7 @@ class PythonDatetimeObjsMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work to get the dict of the arguments to pass to the
         # constructor.
@@ -2224,7 +2221,7 @@ class PythonFractionMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to a dict and then pass it to
@@ -2246,7 +2243,7 @@ class PythonFractionMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work, and then pass the result through the contructor of
         # Fraction.
@@ -2258,7 +2255,7 @@ class PythonFractionMarshaller(PythonDictMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and then there is
         # nothing we can do about it except return it since this is a
         # reasonable approximation.
@@ -2281,7 +2278,7 @@ class PythonListMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to the appropriate numpy type
@@ -2306,7 +2303,7 @@ class PythonListMarshaller(NumpyScalarArrayMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = NumpyScalarArrayMarshaller.read(self, f, dsetgrp, attributes)
@@ -2332,7 +2329,7 @@ class PythonTupleSetDequeMarshaller(PythonListMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # data just needs to be converted to a list and then pass it to
@@ -2354,7 +2351,7 @@ class PythonTupleSetDequeMarshaller(PythonListMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = PythonListMarshaller.read(self, f, dsetgrp, attributes)
@@ -2385,7 +2382,7 @@ class PythonChainMapMarshaller(PythonListMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         grp: h5py.Group,
         name: str,
-        data: Any,
+        data: object,
         type_string: str | None,
     ) -> h5py.Dataset | h5py.Group | None:
         # We just pass the maps attribute along. The proper type_string
@@ -2406,7 +2403,7 @@ class PythonChainMapMarshaller(PythonListMarshaller):
         f: "hdf5storage.utilities.LowLevelFile",
         dsetgrp: h5py.Dataset | h5py.Group,
         attributes: collections.defaultdict,
-    ) -> Any:
+    ) -> object:
         # Use the parent class version to read it and do most of the
         # work.
         data = PythonListMarshaller.read(self, f, dsetgrp, attributes)
