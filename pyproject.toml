@@ -73,7 +73,7 @@ lint.unfixable = [
 "doc/**/__init__.py" = [
     "D104", # Don't require docstrings in documentation.
 ]
-"hdf5storage/Marshallers.py" = [
+"hdf5storage/marshallers.py" = [
     "D101",    # Don't require docstrings in public classes
     "D102",    # Don't require docstrings in public methods
     "PLR0912", # Too many branches

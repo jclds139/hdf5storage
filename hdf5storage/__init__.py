@@ -54,7 +54,7 @@ from typing import Any, Literal, Optional
 
 import h5py
 
-from . import marshallers, pathesc, plugins, utilities
+from hdf5storage import marshallers, pathesc, plugins, utilities
 
 # Define types for the Options arguments and fields that only allow
 # certain values.
