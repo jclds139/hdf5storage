@@ -102,3 +102,5 @@ jobs:
         run: |
           cd docs
           make html
+          cd build/html
+          ls -la
