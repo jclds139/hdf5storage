@@ -1562,7 +1562,7 @@ class PythonScalarMarshaller(NumpyScalarArrayMarshaller):
         out: Any
         # Note: isinstance(data, int) returns True if data is a Python bool
         #       type(data) == int returns False if data is a Python bool
-        if type(data) == int:  # noqa: E721
+        if type(data) is int:
             try:
                 out = np.int64(data)
             except OverflowError:
