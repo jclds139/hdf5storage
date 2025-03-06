@@ -677,7 +677,7 @@ def test_bool_true(fmt):
 
 
 @pytest.mark.parametrize("fmt", fmts)
-def test_bool_talse(fmt):
+def test_bool_false(fmt):
     data = False
     write_readback(fmt, data)
 
