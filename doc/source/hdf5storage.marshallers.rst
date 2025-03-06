@@ -1,15 +1,15 @@
 hdf5storage.Marshallers
 =======================
 
-.. currentmodule:: hdf5storage.Marshallers
+.. currentmodule:: hdf5storage.marshallers
 
-.. automodule:: hdf5storage.Marshallers
+.. automodule:: hdf5storage.marshallers
 
 
 The marshallers have the following inheritance diagram
 
 
-.. inheritance-diagram:: hdf5storage.Marshallers
+.. inheritance-diagram:: hdf5storage.marshallers
    :parts: 1
 
 
