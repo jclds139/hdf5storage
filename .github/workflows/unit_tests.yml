@@ -99,6 +99,7 @@ jobs:
       - name: Build html docs
         run: |
           pwd
+          ls -la
 
   docs2:
     runs-on: 'ubuntu-24.04'
@@ -114,7 +115,8 @@ jobs:
           python -m pip install numpy h5py sphinx sphinx-rtd-theme
           python -m pip install .
       - name: Build html docs
-        working-directory: ./docs
+        working-directory: ./doc
         run: |
           pwd
+          ls -la
           make html
