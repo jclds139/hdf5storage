@@ -2167,7 +2167,7 @@ class PythonDatetimeObjsMarshaller(PythonDictMarshaller):
         }
         if type(data) in attrs:
             cdata = {k: getattr(data, k) for k in attrs[type(data)]}
-        elif isinstance(data, datetime.timezone):
+        elif type(data) is datetime.timezone:  # isinstance does not work here
             parts = data.__reduce__()[1]
             cdata = {"offset": parts[0]} if len(parts) == 1 else {"offset": parts[0], "name": parts[1]}
         return PythonDictMarshaller.write(
