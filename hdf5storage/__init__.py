@@ -41,10 +41,10 @@ import contextlib
 import copy
 import datetime
 import importlib
+import importlib.util
 import inspect
 import itertools
 import os
-import pkgutil
 import posixpath
 import sys
 import threading
@@ -1197,7 +1197,7 @@ class MarshallerCollection:
             # Check if the required modules are here.
             try:
                 for name in m.required_parent_modules:
-                    if name not in sys.modules and pkgutil.find_loader(name) is None:
+                    if name not in sys.modules and importlib.util.find_spec(name) is None:
                         msg = "module not present"
                         raise ImportError(msg)  # noqa: TRY301
             except ImportError:
