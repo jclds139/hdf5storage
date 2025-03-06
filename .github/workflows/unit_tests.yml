@@ -90,10 +90,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Set up Python $PYTHON_VERSION
+      - name: Set up Python ${{ PYTHON_VERSION }}
         uses: actions/setup-python@v5
         with:
-          python-version: $PYTHON_VERSION
+          python-version: ${{ PYTHON_VERSION }}
       - name: Install Python dependencies
         run: |
           python -m pip install numpy h5py sphinx sphinx-rtd-theme
