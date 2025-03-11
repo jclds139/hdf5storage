@@ -50,6 +50,7 @@ import sys
 import threading
 import types
 from collections.abc import Iterable, Iterator, Mapping, Sequence
+from pathlib import Path
 from typing import Any, Literal, Optional
 
 import h5py
@@ -1601,7 +1602,7 @@ class File(collections.abc.MutableMapping):
 
     def __init__(  # noqa: C901, PLR0912
         self: "File",
-        filename: str = "data.h5",
+        filename: str | Path = "data.h5",
         writable: bool = False,
         truncate_existing: bool = False,
         truncate_invalid_matlab: bool = False,
@@ -1615,8 +1616,8 @@ class File(collections.abc.MutableMapping):
         self._file: h5py.File | None = None
         self._lock: threading.Lock = threading.Lock()
         # Check the types of the arguments.
-        if not isinstance(filename, str):
-            msg = "filename must be str."
+        if not isinstance(filename, str | Path):
+            msg = "filename must be str or Path."
             raise TypeError(msg)
         if not isinstance(writable, bool):
             msg = "writable must be bool."
@@ -2423,7 +2424,7 @@ def read(path: pathesc.Path = "/", **keywords: dict) -> object:
 
 
 def savemat(  # noqa: PLR0913
-    file_name: str,
+    file_name: str | Path,
     mdict: Mapping[pathesc.Path, Any],
     appendmat: bool = True,
     fmt: MatfileFormat = "7.3",
@@ -2536,6 +2537,8 @@ def savemat(  # noqa: PLR0913
             file_name = file_name + ".mat"
         elif isinstance(file_name, bytes) and not file_name.endswith(b".mat"):
             file_name = file_name + b".mat"
+        elif isinstance(file_name, Path) and file_name.suffix != ".mat":
+            file_name = file_name.parent / (file_name.stem + ".mat")
 
     # Make the options with matlab compatibility forced.
     options = Options(
@@ -2557,7 +2560,7 @@ def savemat(  # noqa: PLR0913
 
 
 def loadmat(  # noqa: C901, PLR0912, PLR0913
-    file_name: str,
+    file_name: str | Path,
     mdict: dict[Any, Any] | None = None,
     appendmat: bool = True,
     variable_names: Sequence[pathesc.Path] | None = None,
@@ -2663,6 +2666,8 @@ def loadmat(  # noqa: C901, PLR0912, PLR0913
                 filename = file_name + ".mat"
             elif isinstance(file_name, bytes) and not file_name.endswith(b".mat"):
                 filename = file_name + b".mat"
+            elif isinstance(file_name, Path) and file_name.suffix != ".mat":
+                filename = file_name.parent / (file_name.stem + ".mat")
             else:
                 filename = file_name
         else:
