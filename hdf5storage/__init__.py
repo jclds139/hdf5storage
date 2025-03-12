@@ -30,11 +30,11 @@ This is the hdf5storage package, a Python package to read and write
 python data types to HDF5 (Heirarchal Data Format) files beyond just
 Numpy types.
 
-Version 0.2
+Version 1.0
 
 """
 
-__version__ = "0.2"
+__version__ = "1.0"
 
 import collections.abc
 import contextlib
