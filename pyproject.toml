@@ -1,6 +1,6 @@
 [project]
 name = "hdf5storage"
-version = "0.2"
+version = "1.0"
 description = "Utilities to read/write Python types to/from HDF5 files, including MATLAB v7.3 MAT files."
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]
@@ -26,11 +26,6 @@ pytest = ">=8.3"
 sphinx = ">=8.0"
 sphinx_rtd_theme = ">=3.0"
 ruff = ">=0.9"
-
-[[tool.poetry.source]]
-name = "relativity"
-url = "https://artifactory.relspace.net/artifactory/api/pypi/pypi/simple/"
-priority = "primary"
 
 
 [tool.ruff]
@@ -58,7 +53,6 @@ lint.unfixable = [
     "ERA001",  # Don't delete commented out code
     "PERF102", # Don't auto-convert .items() to .values()
 ]
-
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = [
