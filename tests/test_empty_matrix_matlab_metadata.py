@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import random
 import tempfile
+from pathlib import Path
 
 import h5py
 import make_randoms
@@ -50,7 +50,7 @@ def test_write_empty():
             dtype = random.choice(make_randoms.dtypes)
         data = make_randoms.random_numpy(shape, dtype)
         with tempfile.TemporaryDirectory() as folder:
-            filename = os.path.join(folder, "data.h5")
+            filename = Path(folder) / "data.h5"
             # Write
             hdf5storage.write(
                 data,
@@ -80,7 +80,7 @@ def test_read_empty():
             + ["single", "double"],
         )
         with tempfile.TemporaryDirectory() as folder:
-            filename = os.path.join(folder, "data.h5")
+            filename = Path(folder) / "data.h5"
             # Make the file and the data.
             with h5py.File(filename, mode="w") as f:
                 dset = f.create_dataset(name, data=numpy.uint64(shape))

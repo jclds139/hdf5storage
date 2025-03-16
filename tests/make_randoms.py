@@ -34,7 +34,6 @@ import sys
 import warnings
 
 import numpy as np
-import numpy.random
 
 random.seed()
 
@@ -144,20 +143,14 @@ def random_numpy(
         length = random.randint(1, max_string_length)
         data = np.zeros(shape=shape, dtype="S" + str(length))
         for index, _ in np.ndenumerate(data):
-            if allow_unicode:
-                chars = random_bytes_fullrange(length)
-            else:
-                chars = random_bytes(length)
+            chars = random_bytes_fullrange(length) if allow_unicode else random_bytes(length)
             data[index] = np.bytes_(chars)
         return data
     if dtype == "U":
         length = random.randint(1, max_string_length)
         data = np.zeros(shape=shape, dtype="U" + str(length))
         for index, _ in np.ndenumerate(data):
-            if allow_unicode:
-                chars = random_str_some_unicode(length)
-            else:
-                chars = random_str_ascii(length)
+            chars = random_str_some_unicode(length) if allow_unicode else random_str_ascii(length)
             data[index] = np.str_(chars)
         return data
     if dtype == "object":
@@ -323,12 +316,7 @@ def random_structured_numpy_array(
             name_func = random_str_ascii
         names = [
             name_func(max_structured_ndarray_field_lengths)
-            for i in range(
-                random.randint(
-                    min_structured_ndarray_fields,
-                    max_structured_ndarray_fields,
-                ),
-            )
+            for i in range(random.randint(min_structured_ndarray_fields, max_structured_ndarray_fields))
         ]
     dts = [random.choice(list(set(dtypes) - {"S", "U"})) for _ in range(len(names))]
     if field_shapes is None:

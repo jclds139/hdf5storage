@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import random
 import tempfile
+from pathlib import Path
 
 import h5py
 import pytest
@@ -72,7 +72,7 @@ def test_read_filtered_data(compression, shuffle, fletcher32, gzip_level):
     # Write the data to the file with the given name with the provided
     # filters and read it back.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         with h5py.File(filename, mode="w") as f:
             f.create_dataset(name, data=data, chunks=True, **filts)
         out = hdf5storage.read(path=name, filename=filename, matlab_compatible=False)
@@ -107,7 +107,7 @@ def test_write_filtered_data(compression, shuffle, fletcher32, gzip_level):
     # Write the data to the file with the given name with the provided
     # filters and read it back.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(
             data,
             path=name,
@@ -201,7 +201,7 @@ def test_uncompressed_write_filtered_data(
     # Write the data to the file with the given name with the provided
     # filters and read it back.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(
             data,
             path=name,

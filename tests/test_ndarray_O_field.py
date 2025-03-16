@@ -24,8 +24,8 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import tempfile
+from pathlib import Path
 
 import h5py
 import numpy as np
@@ -38,11 +38,11 @@ import hdf5storage
 # case that a field's name is 'O').
 
 
-def test_O_field_compound():
+def test_o_field_compound():
     name = "/a"
     data = np.empty(shape=(1,), dtype=[("O", "int8"), ("a", "uint16")])
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(
             data,
             path=name,
@@ -59,7 +59,7 @@ def test_object_field_group():
     data = np.empty(shape=(1,), dtype=[("a", "O"), ("b", "uint16")])
     data["a"][0] = [1, 2]
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(
             data,
             path=name,
@@ -71,12 +71,12 @@ def test_object_field_group():
             assert isinstance(f[name], h5py.Group)
 
 
-def test_O_and_object_field_group():
+def test_o_and_object_field_group():
     name = "/a"
     data = np.empty(shape=(1,), dtype=[("a", "O"), ("O", "uint16")])
     data["a"][0] = [1, 2]
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(
             data,
             path=name,

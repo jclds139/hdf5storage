@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import random
 import tempfile
+from pathlib import Path
 
 import h5py
 import numpy as np
@@ -98,7 +98,7 @@ def test_all_valid_str_keys(tp, option_keywords):
     # Write the data to the file with the given name with the provided
     # options.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(data, path=name, filename=filename, options=options)
 
         with h5py.File(filename, mode="r") as f:
@@ -149,7 +149,7 @@ def test_str_key_previously_invalid_char(tp, ch, option_keywords):
     # Write the data to the file with the given name with the provided
     # options.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(data, path=name, filename=filename, options=options)
 
         with h5py.File(filename, mode="r") as f:
@@ -205,7 +205,7 @@ def test_string_type_non_str_key(tp, other_tp, option_keywords):
     # Write the data to the file with the given name with the provided
     # options.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(data, path=name, filename=filename, options=options)
 
         with h5py.File(filename, mode="r") as f:
@@ -248,7 +248,7 @@ def test_int_key(tp, option_keywords):
     # Write the data to the file with the given name with the provided
     # options.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.write(data, path=name, filename=filename, options=options)
 
         with h5py.File(filename, mode="r") as f:

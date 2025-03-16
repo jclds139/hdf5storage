@@ -24,10 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-
-import os.path
 import random
 import tempfile
+from pathlib import Path
 
 from asserts import assert_equal
 from make_randoms import (
@@ -66,7 +65,7 @@ def test_multi_write():
 
     # Write it and then read it back item by item.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         hdf5storage.writes(mdict=data, filename=filename)
         out = {}
         for p in data:
@@ -93,7 +92,7 @@ def test_multi_read():
     paths = data.keys()
     # Write it item by item  and then read it back in one unit.
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         for p in paths:
             hdf5storage.write(data=data[p], path=p, filename=filename)
         out = hdf5storage.reads(paths=list(data.keys()), filename=filename)
