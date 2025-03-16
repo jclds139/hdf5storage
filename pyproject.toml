@@ -37,7 +37,8 @@ scipy = ">=1.14.0"
 [tool.ruff]
 line-length = 120
 target-version = "py311"
-exclude = [ # Patterns are glob expressions
+exclude = [
+    "examples/*", # Patterns are glob expressions
 ]
 lint.select = ["ALL"]
 lint.ignore = [
@@ -70,8 +71,9 @@ lint.unfixable = [
     "ANN001", # Allow no function argument type annotations
     "INP001", # Do not require __init__.py module
 ]
-"doc/**/__init__.py" = [
-    "D104", # Don't require docstrings in documentation.
+"doc/source/conf.py" = [
+    "D100",   # Don't require docstring in test modules
+    "INP001", # Do not require __init__.py module
 ]
 "hdf5storage/marshallers.py" = [
     "D101",    # Don't require docstrings in public classes

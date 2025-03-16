@@ -150,4 +150,4 @@ jobs:
           python -m pip install .[tests]
       - name: Lint the code
         run: |
-          ruff check ./hdf5storage --config=pyproject.toml
+          ruff check . --config=pyproject.toml

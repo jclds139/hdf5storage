@@ -161,7 +161,7 @@ def assert_equal_none_format(a, b, options=None):
                 break
             try:
                 tp_conv(k)
-            except:
+            except:  # noqa: E722
                 all_str_keys = False
                 break
         if all_str_keys:
@@ -252,7 +252,7 @@ def assert_equal_none_format(a, b, options=None):
     elif not isinstance(b, np.generic | np.ndarray):
         if b is None or b is Ellipsis or b is NotImplemented:
             # It should be np.float64([])
-            assert type(a) == np.ndarray
+            assert type(a) is np.ndarray
             assert a.dtype == np.float64([]).dtype
             assert a.shape == (0,)
         elif isinstance(b, bytes | bytearray):
@@ -393,7 +393,7 @@ def assert_equal_matlab_format(a, b, options=None):
                 break
             try:
                 tp_conv(k)
-            except:
+            except:  # noqa: E722
                 all_str_keys = False
                 break
         if all_str_keys:
@@ -484,7 +484,7 @@ def assert_equal_matlab_format(a, b, options=None):
     elif not isinstance(b, np.generic | np.ndarray):
         if b is None or b is Ellipsis or b is NotImplemented:
             # It should be np.zeros(shape=(0, 1), dtype='float64'))
-            assert type(a) == np.ndarray
+            assert type(a) is np.ndarray
             assert a.dtype == np.dtype("float64")
             assert a.shape == (1, 0)
         elif isinstance(b, bytes | str | bytearray):
@@ -493,7 +493,7 @@ def assert_equal_matlab_format(a, b, options=None):
             elif isinstance(b, bytes | bytearray):
                 try:
                     c = np.str_(b.decode("ASCII"))
-                except:
+                except:  # noqa: E722
                     c = np.bytes_(b)
                 assert_equal(a, np.atleast_2d(c), options)
             else:
