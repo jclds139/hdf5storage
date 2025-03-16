@@ -1,5 +1,6 @@
 """Test the basic read/write functions in hdf5storage.__init__."""
 
+import importlib
 from collections.abc import Callable
 from pathlib import Path
 
@@ -7,6 +8,12 @@ import numpy as np
 import pytest
 
 import hdf5storage
+
+try:
+    importlib.import_module("scipy.io")
+    _SCIPY_AVAILABLE = True
+except ImportError:
+    _SCIPY_AVAILABLE = False
 
 
 @pytest.mark.parametrize(
@@ -85,6 +92,23 @@ def test_savemat_loadmat(conv_file_path: Callable, tmp_path: Path):
     assert isinstance(output, dict)
     assert set(output.keys()) == {"abc"}
     np.testing.assert_allclose(output["abc"], data["abc"])
+
+
+@pytest.mark.skipif(not _SCIPY_AVAILABLE, reason="scipy not available")
+@pytest.mark.parametrize(
+    ("conv_file_path", "fmt"),
+    [(lambda path: path, "4"), (lambda path: path, "5"), (lambda path: str(path), "4"), (lambda path: str(path), "5")],
+)
+def test_savemat_loadmat_notv7p3(conv_file_path: Callable, fmt: str, tmp_path: Path):
+    """Test the savemat and loadmat functions, using matfile versions 4 and 5 that are dispatched to scipy.io."""
+    file_path = tmp_path / "file.mat"
+    data = {"abc": np.array([1.0, 2.0, 3.0], "f8")}
+    hdf5storage.savemat(conv_file_path(file_path), data, fmt=fmt)
+    assert file_path.is_file()
+    output = hdf5storage.loadmat(conv_file_path(file_path))
+    assert isinstance(output, dict)
+    assert "abc" in output
+    np.testing.assert_allclose(output["abc"][0, :], data["abc"])
 
 
 @pytest.mark.parametrize("conv_file_path", [lambda path: path, lambda path: str(path)])
