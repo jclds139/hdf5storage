@@ -36,16 +36,15 @@ random.seed()
 # Check if the example package is installed because some tests will
 # depend on it.
 try:
-    from example_hdf5storage_marshaller_plugin import SubListMarshaller
+    from example_hdf5storage_marshaller_plugin import SubListMarshaller  # type: ignore  # noqa: PGH003
 
     has_example_hdf5storage_marshaller_plugin = True
-except:
+except ImportError:
     has_example_hdf5storage_marshaller_plugin = False
 
 
-# Need a new marshaller that does nothing.
 class JunkMarshaller(hdf5storage.marshallers.TypeMarshaller):
-    pass
+    """Marshaller that does nothing."""
 
 
 @pytest.mark.parametrize("obj", [None, True, 1, 2.3, set(), {}])
@@ -56,14 +55,14 @@ def test_error_non_tuplelist(obj):
 
 def test_error_missing_element():
     need = ("builtin", "user", "plugin")
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"priority must have.*3 elements"):
         hdf5storage.MarshallerCollection(
             priority=[random.choice(need) for i in range(2)],
         )
 
 
 def test_error_extra_element():
-    with pytest.raises(ValueError):
+    with pytest.raises(ValueError, match=r"priority must have.*3 elements"):
         hdf5storage.MarshallerCollection(
             priority=("builtin", "user", "plugin", "extra"),
         )

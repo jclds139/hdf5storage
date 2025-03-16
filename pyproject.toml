@@ -95,6 +95,20 @@ lint.unfixable = [
 "tests/test_hdf5_filters.py" = [
     "S311", # PRNG not suitable for cryptographic purposes
 ]
+"tests/test_marshaller_collection_priority.py" = [
+    "SLF001", # Access private member
+    "S311",   # PRNG not suitable for cryptographic purposes
+]
+"tests/test_marshallers_requiring_modules.py" = [
+    "ARG002", # Unused method argument
+    "D101",   # Don't require docstrings in public classes
+    "D102",   # Don't require docstrings in public methods
+    "SLF001", # Access private member
+]
+"tests/test_matlab_compatibility.py" = [
+    "S603", # Check for untrusted input to subprocess.call
+    "S607", # Partial executable path
+]
 "tests/test_multi_io.py" = [
     "S311", # PRNG not suitable for cryptographic purposes
 ]

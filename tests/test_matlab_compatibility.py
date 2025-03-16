@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import os.path
+
 import subprocess
+from pathlib import Path
 
 import pytest
 from asserts import assert_equal_from_matlab
@@ -35,13 +35,12 @@ import hdf5storage
 
 
 def test_back_and_forth_matlab():
+    current_dir = Path(__file__).resolve().parent
     mat_files = ["types_v7p3.mat", "types_v7.mat", "python_v7p3.mat", "python_v7.mat"]
-    for i in range(len(mat_files)):
-        mat_files[i] = os.path.join(os.path.dirname(__file__), mat_files[i])
+    mat_file_paths = [current_dir / mat_file for mat_file in mat_files]
 
     script_names = ["make_mat_with_all_types.m", "read_write_mat.m"]
-    for i in range(len(script_names)):
-        script_names[i] = os.path.join(os.path.dirname(__file__), script_names[i])
+    script_paths = [current_dir / script_name for script_name in script_names]
 
     types_v7 = {}
     types_v7p3 = {}
@@ -50,28 +49,28 @@ def test_back_and_forth_matlab():
     try:
         import scipy.io
 
-        matlab_command = "run('" + script_names[0] + "')"
+        matlab_command = f"run('{script_paths[0]!s}')"
         subprocess.check_call(
             ["matlab", "-nosplash", "-nodesktop", "-nojvm", "-r", matlab_command],
         )
-        scipy.io.loadmat(file_name=mat_files[1], mdict=types_v7)
-        hdf5storage.loadmat(file_name=mat_files[0], mdict=types_v7p3)
+        scipy.io.loadmat(file_name=mat_file_paths[1], mdict=types_v7)
+        hdf5storage.loadmat(file_name=mat_file_paths[0], mdict=types_v7p3)
 
-        hdf5storage.savemat(file_name=mat_files[2], mdict=types_v7p3)
-        matlab_command = "run('" + script_names[1] + "')"
+        hdf5storage.savemat(file_name=mat_file_paths[2], mdict=types_v7p3)
+        matlab_command = f"run('{script_paths[1]!s}')"
         subprocess.check_call(
             ["matlab", "-nosplash", "-nodesktop", "-nojvm", "-r", matlab_command],
         )
-        scipy.io.loadmat(file_name=mat_files[3], mdict=python_v7)
-        hdf5storage.loadmat(file_name=mat_files[2], mdict=python_v7p3)
-    except:
+        scipy.io.loadmat(file_name=mat_file_paths[3], mdict=python_v7)
+        hdf5storage.loadmat(file_name=mat_file_paths[2], mdict=python_v7p3)
+    except:  # noqa: E722
         pytest.skip("scipy.io or Matlab not found.")
     finally:
-        for name in mat_files:
-            if os.path.exists(name):
-                os.remove(name)
+        for name in mat_file_paths:
+            if name.exists():
+                name.unlink()
 
-    for name in types_v7p3:
+    for name in types_v7p3:  # noqa: PLC0206
         assert_equal_from_matlab(types_v7p3[name], types_v7[name])
 
     for name in set(types_v7.keys()) - {"__version__", "__header__", "__globals__"}:

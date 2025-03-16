@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import subprocess
 import tempfile
+from pathlib import Path
 
 import numpy as np
 import pytest
@@ -43,8 +43,8 @@ import hdf5storage
 
 
 def julia_command(julia_file, fin, fout):
-    subprocess.check_call(
-        ["julia", julia_file, fin, fout],
+    subprocess.check_call(  # noqa: S603
+        ["julia", julia_file, fin, fout],  # noqa: S607
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
@@ -59,8 +59,9 @@ def test_back_and_forth_julia():
     ]
 
     script_names = ["julia_read_mat.jl"]
+    current_dir = Path(__file__).resolve().parent
     for i in range(len(script_names)):
-        script_names[i] = os.path.join(os.path.dirname(__file__), script_names[i])
+        script_names[i] = current_dir / script_names[i]
 
     to_julia = {}
 
@@ -126,7 +127,7 @@ def test_back_and_forth_julia():
             import scipy.io
 
             for i in range(len(mat_files)):
-                mat_files[i] = os.path.join(temp_dir, mat_files[i])
+                mat_files[i] = Path(temp_dir) / mat_files[i]
             scipy.io.savemat(file_name=mat_files[0], mdict=to_julia)
             hdf5storage.savemat(file_name=mat_files[1], mdict=to_julia)
 
@@ -135,13 +136,13 @@ def test_back_and_forth_julia():
             # hdf5storage.loadmat(file_name=mat_files[2],
             #                    mdict=from_julia_v7_to_v7p3)
             hdf5storage.loadmat(file_name=mat_files[3], mdict=from_julia_v7p3_to_v7p3)
-        except:
+        except:  # noqa: E722
             pytest.skip(
                 "Julia or the MAT package are unavailable or their API/s have changed.",
             )
 
     # Check the results.
-    for name in to_julia:
+    for name in to_julia:  # noqa: PLC0206
         assert name in from_julia_v7p3_to_v7p3
         # assert name in from_julia_v7_to_v7p3
         assert_equal_from_matlab(from_julia_v7p3_to_v7p3[name], to_julia[name])

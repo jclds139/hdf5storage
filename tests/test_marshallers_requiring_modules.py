@@ -24,9 +24,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import os.path
 import sys
 import tempfile
+from pathlib import Path
 
 import h5py
 import numpy as np
@@ -167,7 +167,7 @@ def test_marshaller_read():
 
     name = "/the"
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         with h5py.File(filename, mode="w") as f:
             f.create_dataset(name, data=np.int64([1]))
             f[name].attrs.create("Python.Type", b"ellipsis")
@@ -188,7 +188,7 @@ def test_marshaller_read_approximate_missing_parent():
 
     name = "/the"
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         with h5py.File(filename, mode="w") as f:
             f.create_dataset(name, data=np.int64([1]))
             f[name].attrs.create("Python.Type", b"ellipsis")
@@ -209,7 +209,7 @@ def test_marshaller_read_approximate_missing_import():
 
     name = "/the"
     with tempfile.TemporaryDirectory() as folder:
-        filename = os.path.join(folder, "data.h5")
+        filename = Path(folder) / "data.h5"
         with h5py.File(filename, mode="w") as f:
             f.create_dataset(name, data=np.int64([1]))
             f[name].attrs.create("Python.Type", b"ellipsis")

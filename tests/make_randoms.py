@@ -167,7 +167,7 @@ def random_numpy(  # noqa: C901
             )
         return data
     nbytes = np.ndarray(shape=(1,), dtype=dtype).nbytes
-    bts = np.random.bytes(nbytes * np.prod(shape))
+    bts = np.random.default_rng().bytes(nbytes * np.prod(shape))
     if dtype == "bool":
         bts = b"".join([{True: b"\x01", False: b"\x00"}[ch > 127] for ch in bts])
     data = np.ndarray(shape=shape, dtype=dtype, buffer=bts)
