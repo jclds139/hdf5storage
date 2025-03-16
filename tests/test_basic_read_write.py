@@ -1,4 +1,4 @@
-"""Test opening files using different path types."""
+"""Test the basic read/write functions in hdf5storage.__init__."""
 
 from collections.abc import Callable
 from pathlib import Path

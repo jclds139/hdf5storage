@@ -77,8 +77,8 @@ jobs:
         NUMPY_VERSION: ${{ matrix.numpy-version}}
       shell: bash
       run: |
-        python -m pip install numpy$NUMPY_VERSION h5py$H5PY_VERSION pytest
-        python -m pip install .
+        python -m pip install numpy$NUMPY_VERSION h5py$H5PY_VERSION
+        python -m pip install .[tests,scipy]
     - name: Test with pytest
       run: |
         pytest tests
@@ -94,8 +94,7 @@ jobs:
           python-version: '3.13'
       - name: Install Python dependencies
         run: |
-          python -m pip install numpy h5py sphinx sphinx-rtd-theme
-          python -m pip install .
+          python -m pip install .[docs]
       - name: Build html docs
         working-directory: ./doc
         run: |
@@ -112,8 +111,7 @@ jobs:
           python-version: '3.13'
       - name: Install Python dependencies
         run: |
-          python -m pip install ruff
-          python -m pip install .
+          python -m pip install .[docs]
       - name: Lint the code
         run: |
           ruff check ./hdf5storage --config=pyproject.toml
