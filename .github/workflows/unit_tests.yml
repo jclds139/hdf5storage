@@ -71,6 +71,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
     - name: Install Python dependencies including h5py ${{ matrix.h5py-version }} and NumPy ${{matrix.numpy-version}}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
@@ -103,6 +104,7 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
     - name: Install Python dependencies including h5py ${{ matrix.h5py-version }} and NumPy ${{matrix.numpy-version}}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
@@ -124,6 +126,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+          cache: 'pip'
       - name: Install Python dependencies
         run: |
           python -m pip install .[docs]
@@ -141,6 +144,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
+          cache: 'pip'
       - name: Install Python dependencies
         run: |
           python -m pip install .[tests]
