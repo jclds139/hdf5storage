@@ -30,7 +30,7 @@ from pathlib import Path
 
 import h5py
 import make_randoms
-import numpy
+import numpy as np
 
 import hdf5storage
 
@@ -63,7 +63,7 @@ def test_write_empty():
             with h5py.File(filename, mode="r") as f:
                 dset = f[name]
                 assert isinstance(dset, h5py.Dataset)
-                assert dset.dtype == numpy.dtype("uint64")
+                assert dset.dtype == np.dtype("uint64")
                 assert tuple(dset[:]) == shape
                 assert "MATLAB_empty" in dset.attrs
                 assert dset.attrs["MATLAB_empty"] == 1
@@ -83,10 +83,10 @@ def test_read_empty():
             filename = Path(folder) / "data.h5"
             # Make the file and the data.
             with h5py.File(filename, mode="w") as f:
-                dset = f.create_dataset(name, data=numpy.uint64(shape))
-                dset.attrs.create("MATLAB_class", numpy.bytes_(dtype))
-                dset.attrs.create("MATLAB_empty", numpy.uint8(1))
+                dset = f.create_dataset(name, data=np.uint64(shape))
+                dset.attrs.create("MATLAB_class", np.bytes_(dtype))
+                dset.attrs.create("MATLAB_empty", np.uint8(1))
             # Read the data.
             data = hdf5storage.read(path=name, filename=filename)
             assert data.shape == shape
-            assert data.dtype == numpy.dtype(dtype)
+            assert data.dtype == np.dtype(dtype)

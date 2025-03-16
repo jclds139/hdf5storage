@@ -162,7 +162,7 @@ def test_write_filtered_data(compression, shuffle, fletcher32, gzip_level):
         for level in range(10)
     ],
 )
-def test_uncompressed_write_filtered_data(
+def test_uncompressed_write_filtered_data(  # noqa: PLR0913
     method,
     uncompressed_fletcher32_filter,
     compression,

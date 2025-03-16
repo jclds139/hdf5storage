@@ -81,6 +81,26 @@ lint.unfixable = [
     "PLR0915", # Too many statements
     "C901",    # Too complex
 ]
+"tests/asserts.py" = [
+    "PLR0912", # Too many branches
+    "PLR0915", # Too many statements
+    "C901",    # Too complex
+]
+"tests/make_randoms.py" = [
+    "S311", # PRNG not suitable for cryptographic purposes
+]
+"tests/test_empty_matrix_matlab_metadata.py" = [
+    "S311", # PRNG not suitable for cryptographic purposes
+]
+"tests/test_hdf5_filters.py" = [
+    "S311", # PRNG not suitable for cryptographic purposes
+]
+"tests/test_multi_io.py" = [
+    "S311", # PRNG not suitable for cryptographic purposes
+]
+"tests/test_path_escaping.py" = [
+    "S311", # PRNG not suitable for cryptographic purposes
+]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # Accepts: "google", "numpy", or "pep257".

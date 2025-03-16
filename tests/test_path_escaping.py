@@ -111,7 +111,7 @@ def test_unescaping_u():
         assert s == unescape_path(s_e)
 
 
-def test_unescaping_U():
+def test_unescaping_U():  # noqa: N802
     fmts = [b"{0:08x}".decode("ascii"), b"{0:08X}".decode("ascii")]
     prefix = b"\\U".decode("ascii")
     for _ in range(20):

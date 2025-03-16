@@ -148,10 +148,10 @@ def assert_equal_none_format(a, b, options=None):
             np.str_: lambda x: str(x),
         }
 
-        def tp_conv(x):
+        def tp_conv(x):  # noqa: ANN202
             return converters[type(x)](x)
 
-        def tp_conv_str(x):
+        def tp_conv_str(x):  # noqa: ANN202
             return tp_conv(x)
 
         tps = tuple(converters.keys())
@@ -380,10 +380,10 @@ def assert_equal_matlab_format(a, b, options=None):
             np.str_: lambda x: str(x),
         }
 
-        def tp_conv(x):
+        def tp_conv(x):  # noqa: ANN202
             return converters[type(x)](x)
 
-        def tp_conv_str(x):
+        def tp_conv_str(x):  # noqa: ANN202
             return tp_conv(x)
 
         tps = tuple(converters)

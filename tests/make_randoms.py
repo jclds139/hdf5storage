@@ -121,7 +121,7 @@ def random_float():
     return random.uniform(-1.0, 1.0) * 10.0 ** random.randint(-300, 300)
 
 
-def random_numpy(
+def random_numpy(  # noqa: C901
     shape,
     dtype,
     allow_nan=True,
