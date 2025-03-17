@@ -22,9 +22,9 @@ requires-python = ">=3.11,<4.0"
 dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 
 [project.optional-dependencies]
-tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
+tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
 
 [tool.poetry.group.dev.dependencies]
 pytest = ">=8.3"
