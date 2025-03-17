@@ -18,11 +18,11 @@ classifiers = [
     "Topic :: Database",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 
 [project.optional-dependencies]
-tests = ["pytest >= 8.3", "ruff >= 0.9"]
+tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
 
@@ -31,7 +31,17 @@ pytest = ">=8.3"
 sphinx = ">=8.0"
 sphinx_rtd_theme = ">=3.0"
 ruff = ">=0.9"
+deptry = ">=0.23.0"
 scipy = ">=1.14.0"
+
+
+[tool.deptry]
+extend_exclude = [ # Patterns are regular expressions
+    "doc/",
+]
+
+[tool.deptry.per_rule_ignores]
+DEP002 = ['deptry', 'pytest', 'ruff', 'scipy', 'sphinx', 'sphinx_rtd_theme']
 
 
 [tool.ruff]

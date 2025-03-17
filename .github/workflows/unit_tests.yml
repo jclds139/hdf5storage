@@ -151,3 +151,6 @@ jobs:
       - name: Lint the code
         run: |
           ruff check . --config=pyproject.toml
+      - name: Check dependencies
+        run: |
+          deptry . --config pyproject.toml
