@@ -33,5 +33,5 @@ jobs:
       - name: Upload wheel
         uses: actions/upload-artifact@v4
         with:
-          name: HTML docs
+          name: Wheel and sdist
           path: dist
