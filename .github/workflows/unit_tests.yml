@@ -24,7 +24,6 @@ jobs:
           - 'ubuntu-24.04'
           - 'windows-2022'
         python-version:
-          - '3.10'
           - '3.11'
           - '3.12'
           - '3.13'
@@ -67,6 +66,22 @@ jobs:
             python-version: '3.11'
             h5py-version: '>=3.9,<3.10'
             numpy-version: '<2.0'
+          - os: 'ubuntu-24.04'
+            python-version: '3.10'
+            h5py-version: '' # latest
+            numpy-version: '' # latest
+          - os: 'windows-2022'
+            python-version: '3.10'
+            h5py-version: '' # latest
+            numpy-version: '' # latest
+          - os: 'ubuntu-24.04'
+            python-version: '3.9'
+            h5py-version: '' # latest
+            numpy-version: '' # latest
+          - os: 'windows-2022'
+            python-version: '3.9'
+            h5py-version: '' # latest
+            numpy-version: '' # latest
     runs-on: ${{ matrix.os }}
     steps:
     - name: Checkout repository
