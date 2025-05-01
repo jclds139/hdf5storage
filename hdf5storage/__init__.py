@@ -1677,8 +1677,8 @@ class File(collections.abc.MutableMapping):
             if options.matlab_compatible and self._file.userblock_size >= 128:
                 self._file.close()
                 self._file = None
-                # Get the time.
-                now = datetime.datetime.now(tz=datetime.UTC)
+                # Get the time. Note: Python >=3.11, replace with datetime.UTC
+                now = datetime.datetime.now(tz=datetime.timezone.utc)  # noqa: UP017
                 # Construct the leading string. The MATLAB one looks
                 # like
                 #
