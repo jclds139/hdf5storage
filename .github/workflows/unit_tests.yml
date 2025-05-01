@@ -12,6 +12,10 @@ on:
       - 'COPYING.txt'
       - '.gitignore'
       - '.gitattributes'
+  pull_request:
+    branches:
+      - main
+
 
 jobs:
   tests:
@@ -71,7 +75,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        cache: 'pip'
     - name: Install Python dependencies including h5py ${{ matrix.h5py-version }} and NumPy ${{matrix.numpy-version}}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
@@ -104,7 +107,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        cache: 'pip'
     - name: Install Python dependencies including h5py ${{ matrix.h5py-version }} and NumPy ${{matrix.numpy-version}}
       env:
         H5PY_VERSION: ${{ matrix.h5py-version }}
@@ -126,7 +128,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-          cache: 'pip'
       - name: Install Python dependencies
         run: |
           python -m pip install .[docs]
@@ -134,6 +135,11 @@ jobs:
         working-directory: ./doc
         run: |
           make html
+      - name: Upload html docs
+        uses: actions/upload-artifact@v4
+        with:
+          name: HTML docs
+          path: doc/build/html
 
   lint:
     runs-on: 'ubuntu-24.04'
@@ -144,7 +150,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-          cache: 'pip'
       - name: Install Python dependencies
         run: |
           python -m pip install .[docs,scipy,tests]

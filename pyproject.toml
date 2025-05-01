@@ -1,9 +1,10 @@
 [project]
 name = "hdf5storage"
-version = "1.0.0"
+version = "0.2.0"
 description = "Utilities to read/write Python types to/from HDF5 files, including MATLAB v7.3 MAT files."
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]
+maintainers = [{ name = "Jesse Codling" }, { name = "Josh Ayers" }]
 license = { text = "BSD" }
 keywords = ["hdf5", "matlab"]
 classifiers = [
@@ -25,14 +26,6 @@ dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
 tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
-
-[tool.poetry.group.dev.dependencies]
-pytest = ">=8.3"
-sphinx = ">=8.0"
-sphinx_rtd_theme = ">=3.0"
-ruff = ">=0.9"
-deptry = ">=0.23.0"
-scipy = ">=1.14.0"
 
 
 [tool.deptry]
@@ -130,6 +123,7 @@ lint.unfixable = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # Accepts: "google", "numpy", or "pep257".
+
 
 [build-system]
 requires = ["poetry-core"]
