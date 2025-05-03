@@ -3,7 +3,7 @@ name: Unit tests and lint checks
 on:
   push:
     branches:
-      - numpy2
+      - main
     paths-ignore:
       - 'docs/**'
       - 'MANIFEST.in'
