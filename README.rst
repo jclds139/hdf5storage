@@ -100,7 +100,7 @@ To build the HTML documentation, run either ::
 Development
 ===========
 
-All Python code is formatted using `ruff <https://pypi.org/project/ruff>`_.
+All Python code is formatted using `ruff format <https://docs.astral.sh/ruff/formatter/>`_.
 Releases and Pull Requests should pass all unit tests, and ideally pass type
 checking and have no warnings found by linting.
 
@@ -120,7 +120,7 @@ Linting
 
 This package has the configuration in ``pyproject.toml`` for linting with
 
-* `ruff`_
+* `ruff <https://pypi.org/project/ruff>`_
 
 To lint with `ruff`_, run ::
 
