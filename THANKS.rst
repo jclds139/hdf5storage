@@ -7,3 +7,6 @@ The following people helped contributed code to fix bugs, add features, etc.
 * `Jakub Urban <https://github.com/coobas>`_
 * `Ghislain Antony Vaillant <https://github.com/ghisvail>`_
 
+And in particular:
+
+* `Freja Nordsiek <fnordsie@posteo.net>`_, the original Author and Maintainer

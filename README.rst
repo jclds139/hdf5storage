@@ -13,13 +13,13 @@ wants to be able to read possibly HDF5 and MAT files from untrusted
 sources, so pickling is avoided in this package.
 
 The package's documetation is found at
-http://pythonhosted.org/hdf5storage/
+https://hdf5storage.readthedocs.io
 
 The package's source code is found at
-https://github.com/frejanordsiek/hdf5storage
+https://github.com/jclds139/hdf5storage
 
 The package is licensed under a 2-clause BSD license
-(https://github.com/frejanordsiek/hdf5storage/blob/master/COPYING.txt).
+(https://github.com/jclds139/hdf5storage/blob/master/COPYING.txt).
 
 Installation
 ============

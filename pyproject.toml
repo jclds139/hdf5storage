@@ -4,7 +4,7 @@ version = "0.2.0"
 description = "Utilities to read/write Python types to/from HDF5 files, including MATLAB v7.3 MAT files."
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]
-maintainers = [{ name = "Jesse Codling" }, { name = "Josh Ayers" }]
+maintainers = [{ name = "Jesse R Codling", email = "codling@umich.edu" }, { name = "Josh Ayers" }]
 license = { text = "BSD" }
 keywords = ["hdf5", "matlab"]
 classifiers = [
