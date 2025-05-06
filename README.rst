@@ -27,16 +27,16 @@ Installation
 Dependencies
 ------------
 
-This package only supports Python >= 3.7. Python < 3.7 support was dropped
+This package only supports Python >= 3.10. Python < 3.10 support was dropped
 in version 0.2.
 
 This package requires the python packages to run
 
 * `numpy <https://pypi.org/project/numpy>`_
-* `h5py <https://pypi.org/project/h5py>`_ >= 3.3
-* `setuptools <https://pypi.org/project/setuptools>`_
+* `h5py <https://pypi.org/project/h5py>`_ >= 3.9
+* `poetry <https://python-poetry.org/>`_
 
-Note that support for `h5py <https://pypi.org/project/h5py>`_ 2.1 to 3.2.x
+Note that support for `h5py <https://pypi.org/project/h5py>`_ 2.1 to 3.8.x
 has been dropped in version 0.2.
 This package also has the following optional dependencies
 
@@ -55,21 +55,16 @@ Installing from Source
 ----------------------
 
 To install hdf5storage from source,
-`setuptools <https://pypi.org/project/setuptools>`_ >= 61.0.0 is required.
-Download this package and then install the dependencies ::
-
-    pip install -r requirements.txt
-
-Then to install the package, run either ::
+`poetry <https://python-poetry.org/>`_ is required.
+Download this package and then run ::
 
     pip install .
-
 
 Running Tests
 -------------
 
 For testing, the package `pytest <https://pypi.org/project/pytest>`_
-(>= 6.0) is additionally required. There are some tests that require
+(>= 8.3) is additionally required. There are some tests that require
 Matlab and `scipy <https://pypi.org/project/scipy>`_ to be installed
 and be in the executable path respectively. In addition, there are some
 tests that require `Julia <http://julialang.org/>`_ with the
@@ -78,7 +73,7 @@ means that those tests cannot be run (they will be skipped) but all
 the other tests will run. To install all testing dependencies, other
 than `scipy <https://pypi.org/project/scipy>`_, Julia, Matlab run ::
 
-    pip install -r requirements_tests.txt.
+    pip install -r <(poetry export -E tests)
 
 To run the tests ::
 
@@ -90,12 +85,12 @@ Building Documentation
 
 The documentation additionally requires the following packages
 
-* `sphinx <https://pypi.org/project/sphinx>`_ >= 1.7
-* `sphinx_rtd_theme <https://pypi.org/project/sphinx-rtd-theme>`_
+* `sphinx <https://pypi.org/project/sphinx>`_ >= 8.0
+* `sphinx_rtd_theme <https://pypi.org/project/sphinx-rtd-theme>`_ >= 3.0
 
 The documentation dependencies can be installed by ::
 
-    pip install -r requirements_doc.txt
+    pip install -r <(poetry export -E docs)
 
 To build the HTML documentation, run either ::
 
@@ -105,7 +100,7 @@ To build the HTML documentation, run either ::
 Development
 ===========
 
-All Python code is formatted using `black <https://pypi.org/project/black>`_.
+All Python code is formatted using `ruff <https://docs.astral.sh/ruff/formatter/>`_.
 Releases and Pull Requests should pass all unit tests, and ideally pass type
 checking and have no warnings found by linting.
 
@@ -126,15 +121,10 @@ Linting
 This package has the configuration in ``pyproject.toml`` for linting with
 
 * `ruff <https://pypi.org/project/ruff>`_
-* `pylint <https://pypi.org/project/pylint>`_
 
 To lint with `ruff <https://pypi.org/project/ruff>`_, run ::
 
     ruff .
-
-To lint with `pylint <https://pypi.org/project/pylint>`_, run ::
-
-    pylint src/*/*.py
 
 
 Python 2
@@ -420,7 +410,7 @@ Versions
      * The entire configuration is now put in the ``pyproject.toml`` files
        (PEP 621) and the ``setup.py`` file has been removed.
      * Changed all ``IOError`` to ``OSError``.
-     * Added a file object class :py:class:`hdf5storage.File` for
+     * Added a file object class ``hdf5storage.File`` for
        opening a file and doing multiple read and/or write calls on the
        same file.
      * ``reads``, ``read``, and ``loadmat`` now raise a ``KeyError`` if
