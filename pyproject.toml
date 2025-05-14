@@ -4,7 +4,10 @@ version = "0.2.0"
 description = "Utilities to read/write Python types to/from HDF5 files, including MATLAB v7.3 MAT files."
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]
-maintainers = [{ name = "Jesse R Codling", email = "codling@umich.edu" }, { name = "Josh Ayers" }]
+maintainers = [
+    { name = "Jesse R Codling", email = "codling@umich.edu" },
+    { name = "Josh Ayers", email = "josh@ayers.pw" },
+]
 license = { text = "BSD" }
 keywords = ["hdf5", "matlab"]
 classifiers = [
@@ -26,6 +29,17 @@ dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
 tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
+dev = [
+    # Docs
+    "sphinx >= 8.0",
+    "sphinx_rtd_theme >= 3.0",
+    # Scipy
+    "scipy >= 1.14.0",
+    # Tests and linting
+    "pytest >= 8.3",
+    "ruff >= 0.9",
+    "deptry >= 0.23.0",
+]
 
 
 [tool.deptry]
