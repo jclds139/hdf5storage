@@ -990,6 +990,21 @@ def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
     raise TypeError(msg)
 
 
+def deep_array_equal(a: Any, b: Any) -> bool:
+    """
+    This is a more robust version of np.array_equal that works for object arrays
+    that contain ndarrays.
+    """
+    if isinstance(a, np.ndarray) and isinstance(b, np.ndarray) and (a.dtype == object or b.dtype == object):
+        if a.shape != b.shape:
+            return False
+
+        return all(deep_array_equal(x,y) for x,y in zip(a,b))
+
+    # fallback to normal if dtype != object
+    return np.array_equal(a,b)
+
+
 def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
@@ -1386,7 +1401,7 @@ def set_attributes_all(
             if k not in existing:
                 attrs.create(k, val)
             elif k == "MATLAB_fields":
-                if not np.array_equal(val, existing[k]):
+                if not deep_array_equal(val, existing[k]):
                     attrs.create(k, val)
             else:
                 try:
