@@ -97,6 +97,7 @@ The documentation additionally requires the following packages
 
 * `sphinx <https://pypi.org/project/sphinx>`_ >= 8.0
 * `sphinx_rtd_theme <https://pypi.org/project/sphinx-rtd-theme>`_ >= 3.0
+* `sphinx_rtd_dark_mode <https://pypi.org/project/sphinx-rtd-dark-mode>`_ >= 1.3
 
 The documentation dependencies can be installed by ::
 
