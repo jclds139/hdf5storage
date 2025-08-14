@@ -8,7 +8,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "hdf5storage"
-copyright = "2013-2021, Freja Nordsiek"  # noqa: A001
+copyright = "2013-2025, the hdf5storage maintainers"  # noqa: A001
 author = "Freja Nordsiek"
 
 # The full version, including alpha/beta/rc tags
@@ -31,6 +31,7 @@ extensions = [
     "sphinx.ext.autosummary",
     "sphinx.ext.inheritance_diagram",
     "sphinx.ext.napoleon",
+    "sphinx_rtd_dark_mode",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -40,6 +41,9 @@ templates_path = ["_templates"]
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
+
+# User starts in light mode but has the option to switch to dark.
+default_dark_mode = False
 
 
 # -- Options for HTML output -------------------------------------------------

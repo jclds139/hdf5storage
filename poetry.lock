@@ -751,6 +751,22 @@ lint = ["flake8 (>=6.0)", "mypy (==1.11.1)", "pyright (==1.1.384)", "pytest (>=6
 test = ["cython (>=3.0)", "defusedxml (>=0.7.1)", "pytest (>=8.0)", "setuptools (>=70.0)", "typing_extensions (>=4.9)"]
 
 [[package]]
+name = "sphinx-rtd-dark-mode"
+version = "1.3.0"
+description = "Dark mode for the Sphinx Read the Docs theme."
+optional = true
+python-versions = ">=3.4"
+groups = ["main"]
+markers = "extra == \"docs\""
+files = [
+    {file = "sphinx_rtd_dark_mode-1.3.0-py3-none-any.whl", hash = "sha256:478da69c72a2a2ed7665c1f633cc612039f5801df416fd5f7c4820c2fe08c9c5"},
+    {file = "sphinx_rtd_dark_mode-1.3.0.tar.gz", hash = "sha256:0272bf3d9ef620921adc67e5634a66969419e744da84ea18830adacfdb160ea8"},
+]
+
+[package.dependencies]
+sphinx-rtd-theme = "*"
+
+[[package]]
 name = "sphinx-rtd-theme"
 version = "3.0.2"
 description = "Read the Docs theme for Sphinx"
@@ -972,11 +988,11 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [extras]
-docs = ["sphinx", "sphinx_rtd_theme"]
+docs = ["docutils", "sphinx", "sphinx_rtd_dark_mode", "sphinx_rtd_theme"]
 scipy = ["scipy"]
 tests = ["deptry", "pytest", "ruff"]
 
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10,<4.0"
-content-hash = "c8024e821ec0d226b9f29e79ebffccce3c075c73ac38708e37debd214847cbfc"
+content-hash = "d2d2931141606b8dfd138704d855ae5d579d99ac44f73c0b939e023b9d69de6b"
