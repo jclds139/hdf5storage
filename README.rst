@@ -1,3 +1,13 @@
+|lint-badge| |pre-commit-badge|
+
+.. |pre-commit-badge| image:: https://results.pre-commit.ci/badge/github/jclds139/hdf5storage/main.svg
+   :target: https://results.pre-commit.ci/latest/github/jclds139/hdf5storage/main
+   :alt: pre-commit.ci status
+
+.. |lint-badge| image:: https://github.com/jclds139/hdf5storage/actions/workflows/unit_tests.yml/badge.svg
+   :target: https://github.com/jclds139/hdf5storage/actions/workflows/unit_tests.yml
+   :alt: Unit tests and lint checks
+
 Overview
 ========
 
