@@ -89,8 +89,8 @@ jobs:
         NUMPY_VERSION: ${{ matrix.numpy-version}}
       shell: bash
       run: |
-        python -m pip install numpy$NUMPY_VERSION h5py$H5PY_VERSION
-        python -m pip install .[scipy,tests]
+        python -m pip install "numpy$NUMPY_VERSION" "h5py$H5PY_VERSION"
+        python -m pip install '.[scipy,tests]'
     - name: Test with pytest
       run: |
         pytest tests
@@ -121,8 +121,8 @@ jobs:
         NUMPY_VERSION: ${{ matrix.numpy-version}}
       shell: bash
       run: |
-        python -m pip install numpy$NUMPY_VERSION h5py$H5PY_VERSION
-        python -m pip install .[tests]
+        python -m pip install "numpy$NUMPY_VERSION" "h5py$H5PY_VERSION"
+        python -m pip install '.[tests]'
     - name: Test with pytest
       run: |
         pytest tests
@@ -138,7 +138,7 @@ jobs:
           python-version: '3.13'
       - name: Install Python dependencies
         run: |
-          python -m pip install .[docs]
+          python -m pip install '.[docs]'
       - name: Build html docs
         working-directory: ./doc
         run: |
@@ -160,7 +160,7 @@ jobs:
           python-version: '3.13'
       - name: Install Python dependencies
         run: |
-          python -m pip install .[docs,scipy,tests]
+          python -m pip install '.[docs,scipy,tests]'
       - name: Lint the code
         run: |
           ruff check . --config=pyproject.toml

@@ -446,4 +446,3 @@ compatible reversible.
           dtype='<U5'),
       'hh': b'how many?',
       'ii': array(['text', array([ 1, -3,  0], dtype=int8)], dtype=object)}}
-

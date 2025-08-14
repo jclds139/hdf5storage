@@ -90,4 +90,3 @@ MarshallerCollection
 .. autoclass:: MarshallerCollection
    :members:
    :show-inheritance:
-
