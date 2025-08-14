@@ -999,10 +999,10 @@ def deep_array_equal(a: Any, b: Any) -> bool:
         if a.shape != b.shape:
             return False
 
-        return all(deep_array_equal(x,y) for x,y in zip(a,b))
+        return all(deep_array_equal(x, y) for x, y in zip(a, b))
 
     # fallback to normal if dtype != object
-    return np.array_equal(a,b)
+    return np.array_equal(a, b)
 
 
 def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
