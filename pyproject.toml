@@ -73,6 +73,7 @@ lint.unfixable = [
     "D104",   # Don't require docstrings in test packages.
     "ANN001", # Allow no function argument type annotations
     "INP001", # Do not require __init__.py module
+    "PLC0415",# Allow module import during test runs
 ]
 "doc/source/conf.py" = [
     "D100",   # Don't require docstring in test modules
