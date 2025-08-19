@@ -99,4 +99,3 @@ Features to Add
 * A function to find and delete Datasets and Groups inside the Group
   :py:attr:`Options.group_for_references` that are not referenced by
   other Datasets in the file.
-
