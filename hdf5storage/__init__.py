@@ -53,7 +53,10 @@ import h5py
 
 from hdf5storage import marshallers, pathesc, plugins, utilities
 
-__version__ = importlib.metadata.version(__package__)
+try:
+    __version__ = importlib.metadata.version(__package__)
+except (importlib.metadata.PackageNotFoundError, ValueError):
+    __version__ = "0.0.0-dev"
 
 # Define types for the Options arguments and fields that only allow
 # certain values.
