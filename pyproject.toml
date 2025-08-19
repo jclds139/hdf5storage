@@ -1,6 +1,6 @@
 [project]
 name = "hdf5storage"
-version = "0.2.0"
+version = "0.2.1"
 description = "Utilities to read/write Python types to/from HDF5 files, including MATLAB v7.3 MAT files."
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]

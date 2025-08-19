@@ -41,3 +41,6 @@ nosetests.xml
 *.rst~
 *.txt~
 *.toml~
+
+# Poetry locks are only needed for final applications
+poetry.lock
