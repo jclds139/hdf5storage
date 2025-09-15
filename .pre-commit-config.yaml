@@ -30,3 +30,6 @@ repos:
 #     hooks:
 #     -   id: numpydoc-validation
 #         files: 'hdf5storage/.*\.py$'
+
+ci:
+    autoupdate_schedule: monthly
