@@ -1,6 +1,7 @@
 """Test the basic read/write functions in hdf5storage.__init__."""
 
 import importlib
+import importlib.metadata
 from collections.abc import Callable
 from pathlib import Path
 
@@ -14,6 +15,13 @@ try:
     _SCIPY_AVAILABLE = True
 except ImportError:
     _SCIPY_AVAILABLE = False
+
+
+def test_version():
+    """Test the __version__ attribute."""
+    version = hdf5storage.__version__
+    assert isinstance(version, str)
+    assert version == importlib.metadata.version("hdf5storage")
 
 
 @pytest.mark.parametrize(

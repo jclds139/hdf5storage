@@ -31,4 +31,3 @@ TypeNotMatlabCompatibleError
 
 .. autoexception:: TypeNotMatlabCompatibleError
    :show-inheritance:
-

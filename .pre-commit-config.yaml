@@ -1,0 +1,35 @@
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+    -   id: end-of-file-fixer
+    -   id: mixed-line-ending
+    -   id: check-added-large-files
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: destroyed-symlinks
+-   repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.9
+    hooks:
+        # run the formatter
+    -   id: ruff-format
+-   repo: https://github.com/rhysd/actionlint
+    rev: v1.7.7
+    hooks:
+            # lint GitHub actions
+            - id: actionlint
+-   repo: https://github.com/pre-commit/pygrep-hooks
+    rev: v1.10.0
+    hooks:
+    -   id: python-check-blanket-noqa
+    -   id: rst-directive-colons
+# Docstring validation.
+# TODO: need to clean up the existing docstrings before enabling this check
+# -   repo: https://github.com/numpy/numpydoc
+#     rev: v1.9.0
+#     hooks:
+#     -   id: numpydoc-validation
+#         files: 'hdf5storage/.*\.py$'
+
+ci:
+    autoupdate_schedule: monthly

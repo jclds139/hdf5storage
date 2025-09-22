@@ -69,7 +69,7 @@ def find_thirdparty_marshaller_plugins() -> dict[str, dict[str, importlib.metada
         plugins. The keys are the Marshaller API versions (``str``) and
         the values are ``dict`` of the entry points, with the module
         names as the keys (``str``) and the values being the entry
-        points (``pkg_resources.EntryPoint``).
+        points (``importlib.metadata.EntryPoint``).
 
     See Also
     --------
