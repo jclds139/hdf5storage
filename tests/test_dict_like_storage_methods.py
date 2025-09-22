@@ -55,10 +55,10 @@ invalid_characters = ("\x00", "/")
 
 # Generate a bunch of random key_values_names.
 keys_values_names = [("keys", "values")]
-for i in range(5):
+for _ in range(5):
     names = ("a", "a")
     while names[0] == names[1]:
-        names = [random_str_ascii(8) for i in range(2)]
+        names = (random_str_ascii(8), random_str_ascii(8))
     keys_values_names.append(names)
 
 # Set the other key types.

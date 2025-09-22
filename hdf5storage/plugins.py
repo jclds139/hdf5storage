@@ -78,6 +78,4 @@ def find_thirdparty_marshaller_plugins() -> dict[str, dict[str, importlib.metada
     """
     entry_points = importlib.metadata.entry_points()
     all_plugins = tuple(entry_points.select(group="hdf5storage.marshallers.plugins"))
-    return {
-        ver: {p.module_name: p for p in all_plugins if p.name == ver} for ver in supported_marshaller_api_versions()
-    }
+    return {ver: {p.module: p for p in all_plugins if p.name == ver} for ver in supported_marshaller_api_versions()}
