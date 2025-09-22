@@ -99,7 +99,16 @@ jobs:
         python -m pip install '.[scipy,tests]'
     - name: Test with pytest
       run: |
-        pytest tests
+        pytest tests --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   tests-no-scipy:
     strategy:
@@ -131,7 +140,16 @@ jobs:
         python -m pip install '.[tests]'
     - name: Test with pytest
       run: |
-        pytest tests
+        pytest tests --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+    - name: Upload test results to Codecov
+      if: ${{ !cancelled() }}
+      uses: codecov/test-results-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   build-docs:
     runs-on: 'ubuntu-24.04'
