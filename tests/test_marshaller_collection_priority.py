@@ -36,7 +36,7 @@ random.seed()
 # Check if the example package is installed because some tests will
 # depend on it.
 try:
-    from example_hdf5storage_marshaller_plugin import SubListMarshaller
+    from example_hdf5storage_marshaller_plugin import SubListMarshaller  # type: ignore # noqa: PGH003
 
     has_example_hdf5storage_marshaller_plugin = True
 except ImportError:
