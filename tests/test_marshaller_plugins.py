@@ -36,7 +36,7 @@ import hdf5storage.plugins
 # Check if the example package is installed because some tests will
 # depend on it.
 try:
-    import example_hdf5storage_marshaller_plugin  # type: ignore # noqa: PGH003
+    import example_hdf5storage_marshaller_plugin  # type: ignore  # noqa: PGH003
 
     has_example_hdf5storage_marshaller_plugin = True
 except ImportError:
