@@ -48,7 +48,7 @@ extend_exclude = [ # Patterns are regular expressions
 ]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ['deptry', 'pytest', 'ruff', 'scipy', 'sphinx', 'sphinx_rtd_theme']
+DEP002 = ['deptry', 'pytest', 'pytest-cov', 'ruff', 'scipy', 'sphinx', 'sphinx_rtd_theme']
 
 
 [tool.ruff]
