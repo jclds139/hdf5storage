@@ -63,6 +63,7 @@ extend_exclude = [ # Patterns are regular expressions
 [tool.deptry.per_rule_ignores]
 DEP002 = [
   'deptry',
+  'mypy',
   'pytest',
   'pytest-cov',
   'ruff',
