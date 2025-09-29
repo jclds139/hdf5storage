@@ -29,6 +29,10 @@ dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
 tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
+typechecking = [
+    "mypy ~= 1.15", # pin mypy to a minor version for consistency
+    "scipy-stubs",
+]
 dev = [
     # Docs
     "sphinx >= 8.0",
@@ -39,6 +43,9 @@ dev = [
     "pytest >= 8.3",
     "ruff >= 0.9",
     "deptry >= 0.23.0",
+    # Type Checking
+    "mypy ~= 1.15",
+    "scipy-stubs",
 ]
 
 
@@ -48,7 +55,16 @@ extend_exclude = [ # Patterns are regular expressions
 ]
 
 [tool.deptry.per_rule_ignores]
-DEP002 = ['deptry', 'pytest', 'ruff', 'scipy', 'sphinx', 'sphinx_rtd_theme']
+DEP002 = [
+    'deptry',
+    'mypy',
+    'pytest',
+    'ruff',
+    'scipy',
+    'scipy-stubs',
+    'sphinx',
+    'sphinx_rtd_theme',
+]
 
 
 [tool.ruff]
@@ -142,6 +158,9 @@ lint.unfixable = [
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # Accepts: "google", "numpy", or "pep257".
 
+[[tool.mypy.overrides]]
+module = ["h5py"]
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core"]
