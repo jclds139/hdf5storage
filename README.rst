@@ -10,7 +10,7 @@
 
 .. |codecov-badge| image:: https://codecov.io/github/jclds139/hdf5storage/graph/badge.svg?token=OWTWBZ0K54 
 :target: https://codecov.io/github/jclds139/hdf5storage
-:alt: Unit tests and lint checks
+:alt: Code coverage
 
 
 
