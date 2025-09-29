@@ -30,11 +30,13 @@ import collections.abc
 import pathlib
 import posixpath
 import re
+import typing
 from collections.abc import Sequence
 from re import Match, Pattern
 
 # Define the type for all paths
 Path = str | bytes | pathlib.PurePath | Sequence[str | bytes | pathlib.PurePath]
+PathT = typing.TypeVar("PathT", bound=Path)
 
 
 # For escaping and unescaping unicode paths, we need compiled regular

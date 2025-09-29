@@ -93,6 +93,9 @@ lint.unfixable = [
     "D100",   # Don't require docstring in test modules
     "INP001", # Do not require __init__.py module
 ]
+"hdf5storage/__init__.py" = [
+    "ANN401",  # Numerous instances where we need to annotate *args or **keywords with Any
+]
 "hdf5storage/marshallers.py" = [
     "D101",    # Don't require docstrings in public classes
     "D102",    # Don't require docstrings in public methods

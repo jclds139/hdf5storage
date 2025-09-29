@@ -39,13 +39,15 @@ import copy
 import posixpath
 import random
 import sys
-from collections.abc import MutableMapping
+from collections.abc import Iterable, MutableMapping
 from typing import Any
 
 import h5py
 import numpy as np
+import numpy.typing as npt
 
 import hdf5storage.exceptions
+from hdf5storage.typing import ndarray_has_type
 
 
 def does_dtype_have_a_zero_shape(dt: np.dtype) -> bool:
@@ -372,7 +374,7 @@ class LowLevelFile:
 
     def write_object_array(  # noqa: C901, PLR0912
         self: "LowLevelFile",
-        data: np.ndarray,
+        data: np.ndarray | np.object_,
     ) -> np.ndarray | h5py.Reference:
         """Write an array of objects recursively.
 
@@ -845,12 +847,12 @@ def convert_to_str(  # noqa: C901, PLR0911
 def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
-) -> np.ndarray | np.str_:
+) -> npt.NDArray[np.str_] | np.str_:
     r"""Decode data to Numpy unicode string (``numpy.str_``).
 
     Decodes `data` to Numpy unicode string (UTF-32), which is
-    ``numpy.str_``, or an array of them. If it can't be decoded, it
-    is returned as is. Unsigned integers, Python string types (``str``,
+    ``numpy.str_``, or an array of them. If it can't be decoded, a
+    TypeError is raised. Unsigned integers, Python string types (``str``,
     ``bytes``), and ``numpy.bytes_`` are supported. If it is an array of
     ``numpy.bytes_``, an array of those all converted to
     ``numpy.str_`` is returned. ``bytes`` and ``numpy.bytes_`` are
@@ -900,33 +902,30 @@ def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
     numpy.str_
 
     """
-    # The method of conversion depends on its type.
-    if isinstance(
-        data,
-        np.ndarray | np.uint8 | np.uint16 | np.uint32 | np.bytes_ | np.str_,
-    ):
-        if data.dtype.type == np.str_:
+    # Handle scalars first
+    if isinstance(data, str | np.str_):
+        return np.str_(data)
+    if isinstance(data, bytes | np.bytes_ | bytearray):
+        return np.str_(data.decode("UTF-8"))
+    if isinstance(data, np.uint8 | np.uint16):  # pyright: ignore[reportArgumentType]
+        # They are single UTF-8 or UTF-16 scalars, which can be
+        # wrapped into an array and recursed.
+        return convert_to_numpy_str(np.atleast_1d(data))[0]  # type: ignore[return-value]  # this will be a np.str_
+    if isinstance(data, np.uint32):  # pyright: ignore[reportArgumentType]
+        # It is just the uint32 version of the character, so it just
+        # needs to be have the dtype essentially changed by having
+        # its bytes read into ndarray.
+        return np.ndarray(shape=(), dtype="U1", buffer=data.data)[()]
+    # Handle arrays
+    if isinstance(data, np.ndarray):
+        if ndarray_has_type(data, np.str_):
             # It is already an np.str_ or array of them, so nothing needs to
             # be done.
             return data
-        if data.dtype.type == np.bytes_:
-            if isinstance(data, np.bytes_):
-                return np.str_(data.decode("UTF-8"))
-            return np.char.encode(data, "UTF-32")  # type: ignore[arg-type]
-        if isinstance(data, np.uint8 | np.uint16):
-            # They are single UTF-8 or UTF-16 scalars, which can be
-            # wrapped into an array and recursed.
-            return convert_to_numpy_str(np.atleast_1d(data))[0]
-        if isinstance(data, np.uint32):
-            # It is just the uint32 version of the character, so it just
-            # needs to be have the dtype essentially changed by having
-            # its bytes read into ndarray.
-            return np.ndarray(shape=(), dtype="U1", buffer=data.data)[()]
-        if isinstance(data, np.ndarray) and data.dtype.name in {
-            "uint8",
-            "uint16",
-            "uint32",
-        }:
+        if ndarray_has_type(data, np.bytes_):
+            # Just decode the bytes as UTF-8
+            return np.char.decode(data, "UTF-8")
+        if ndarray_has_type(data, np.uint8) or ndarray_has_type(data, np.uint16) or ndarray_has_type(data, np.uint32):
             # It is an ndarray of some uint type. How it is converted
             # depends on its shape. If its shape is just (), then it is
             # just a scalar wrapped in an array, which can be converted
@@ -977,15 +976,8 @@ def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
             if swapbytes:
                 return np.char.decode(data.copy().byteswap().view(dt), encoding)
             return np.char.decode(data.copy().view(dt), encoding)
-        msg = "Not a type that can be converted to str."
+        msg = "The array is not a type that can be converted to an array of strings."
         raise TypeError(msg)
-    if isinstance(data, str):
-        # Easily converted through constructor.
-        return np.str_(data)
-    if isinstance(data, bytes | bytearray):
-        # All of them can be decoded and then passed through the
-        # constructor.
-        return np.str_(data.decode("UTF-8"))
     msg = "Not a type that can be converted to str."
     raise TypeError(msg)
 
@@ -993,13 +985,13 @@ def convert_to_numpy_str(  # noqa: C901, PLR0911, PLR0912
 def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
     data: str | bytes | bytearray | np.unsignedinteger | np.bytes_ | np.str_ | np.ndarray,
     length: int | None = None,
-) -> np.ndarray | np.bytes_:
+) -> npt.NDArray[np.bytes_] | np.bytes_:
     r"""Decode data to Numpy UTF-8 econded string (``numpy.bytes_``).
 
     Decodes `data` to a Numpy UTF-8 encoded string, which is
     ``numpy.bytes_``, or an array of them in which case it will be ASCII
-    encoded instead. If it can't be decoded, it is returned as
-    is. Unsigned integers, Python string types (``str``, ``bytes``), and
+    encoded instead. If it can't be decoded, a TypeError is raised.
+    Unsigned integers, Python string types (``str``, ``bytes``), and
     ``numpy.str_`` (UTF-32) are supported.
 
     For an array of unsigned integers, it may be desirable to make an
@@ -1047,37 +1039,39 @@ def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
 
     """
     # The method of conversion depends on its type.
-    if isinstance(
-        data,
-        np.ndarray | np.uint8 | np.uint16 | np.uint32 | np.bytes_ | np.str_,
-    ):
-        if data.dtype.type == np.bytes_:
+    # Handle scalars first
+    if isinstance(data, np.bytes_):
+        return data
+    if isinstance(data, np.uint16 | np.uint32):  # pyright: ignore[reportArgumentType]
+        # They are single UTF-16 or UTF-32 scalars, and are easily
+        # converted to a UTF-8 string and then passed through the
+        # constructor.
+        return np.bytes_(convert_to_str(data).encode("UTF-8"))
+    if isinstance(data, np.uint8):  # pyright: ignore[reportArgumentType]
+        # It is just the uint8 version of the character, so it just
+        # needs to be have the dtype essentially changed by having
+        # its bytes read into ndarray.
+        return np.ndarray(shape=(), dtype="S1", buffer=data.data)[()]
+    if isinstance(data, np.str_):
+        return np.bytes_(data.encode("UTF-8"))
+    if isinstance(data, bytes | bytearray):
+        # Easily converted through constructor.
+        return np.bytes_(data)
+    if isinstance(data, str):
+        return np.bytes_(data.encode("UTF-8"))
+    # Handle arrays
+    if isinstance(data, np.ndarray):
+        if ndarray_has_type(data, np.bytes_):
             # It is already an np.bytes_ or array of them, so nothing
             # needs to be done.
             return data
-        if isinstance(data, np.uint16 | np.uint32):
-            # They are single UTF-16 or UTF-32 scalars, and are easily
-            # converted to a UTF-8 string and then passed through the
-            # constructor.
-            return np.bytes_(convert_to_str(data).encode("UTF-8"))
-        if isinstance(data, np.uint8):
-            # It is just the uint8 version of the character, so it just
-            # needs to be have the dtype essentially changed by having
-            # its bytes read into ndarray.
-            return np.ndarray(shape=(), dtype="S1", buffer=data.data)[()]
-        if isinstance(data, np.str_):
-            return np.bytes_(data.encode("UTF-8"))
-        if isinstance(data, np.ndarray) and data.dtype.char == "U":
+        if ndarray_has_type(data, np.str_):
             # We just need to convert it elementwise.
             new_data = np.zeros(shape=data.shape, dtype="S" + str(data.dtype.itemsize))
             for index, x in np.ndenumerate(data):
                 new_data[index] = np.bytes_(x.encode("UTF-8"))
             return new_data
-        if isinstance(data, np.ndarray) and data.dtype.name in {
-            "uint8",
-            "uint16",
-            "uint32",
-        }:
+        if ndarray_has_type(data, np.uint8) or ndarray_has_type(data, np.uint16) or ndarray_has_type(data, np.uint32):
             # It is an ndarray of some uint type. How it is converted
             # depends on its shape. If its shape is just (), then it is
             # just a scalar wrapped in an array, which can be converted
@@ -1110,7 +1104,7 @@ def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
 
             # If it is uint8, we can just use the object directly as the
             # buffer for the new data.
-            if data.dtype.name == "uint8":
+            if ndarray_has_type(data, np.uint8):
                 return np.ndarray(
                     shape=new_shape,
                     dtype="S" + str(length2),
@@ -1137,14 +1131,9 @@ def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
 
             # Only thing is left is to reshape it.
             return new_data.reshape(tuple(new_shape))
-        msg = "Not a type that can be converted to str."
+        msg = "The array is not a type that can be converted to an array of bytes."
         raise TypeError(msg)
-    if isinstance(data, bytes | bytearray):
-        # Easily converted through constructor.
-        return np.bytes_(data)
-    if isinstance(data, str):
-        return np.bytes_(data.encode("UTF-8"))
-    msg = "Not a type that can be converted to str."
+    msg = "Not a type that can be converted to bytes."
     raise TypeError(msg)
 
 
@@ -1317,7 +1306,7 @@ def convert_attribute_to_string(value: object) -> str | None:
     return None
 
 
-def convert_attribute_to_string_array(value: object) -> list[str] | None:
+def convert_attribute_to_string_array(value: Iterable[Any] | None) -> list[str] | None:
     """Convert an Attribute value to a string array.
 
     Converts the value of an Attribute to a string array if possible
