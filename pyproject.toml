@@ -5,22 +5,22 @@ description = "Utilities to read/write Python types to/from HDF5 files, includin
 readme = "README.rst"
 authors = [{ name = "Freja Nordsiek", email = "fnordsie@posteo.net" }]
 maintainers = [
-    { name = "Jesse R Codling", email = "codling@umich.edu" },
-    { name = "Josh Ayers", email = "josh@ayers.pw" },
+  { name = "Jesse R Codling", email = "codling@umich.edu" },
+  { name = "Josh Ayers", email = "josh@ayers.pw" },
 ]
 license = { text = "BSD" }
 keywords = ["hdf5", "matlab"]
 classifiers = [
-    "Programming Language :: Python :: 3 :: Only",
-    "Development Status :: 3 - Alpha",
-    "License :: OSI Approved :: BSD License",
-    "Operating System :: OS Independent",
-    "Intended Audience :: Developers",
-    "Intended Audience :: Information Technology",
-    "Intended Audience :: Science/Research",
-    "Topic :: Scientific/Engineering",
-    "Topic :: Database",
-    "Topic :: Software Development :: Libraries :: Python Modules",
+  "Programming Language :: Python :: 3 :: Only",
+  "Development Status :: 3 - Alpha",
+  "License :: OSI Approved :: BSD License",
+  "Operating System :: OS Independent",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Information Technology",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Database",
+  "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.10,<4.0"
 dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
@@ -28,42 +28,49 @@ dependencies = ["numpy >= 1.26", "h5py >= 3.9"]
 [project.optional-dependencies]
 docs = ["sphinx >= 8.0", "sphinx_rtd_theme >= 3.0"]
 scipy = ["scipy >= 1.14.0"]
-tests = ["pytest >= 8.3", "ruff >= 0.9", "deptry >= 0.23.0"]
+tests = [
+  "pytest >= 8.3",
+  "ruff >= 0.9",
+  "deptry >= 0.23.0",
+  "pytest-cov >= 6.2.0",
+]
 typechecking = [
-    "mypy ~= 1.15", # pin mypy to a minor version for consistency
-    "scipy-stubs",
+  "mypy ~= 1.15", # pin mypy to a minor version for consistency
+  "scipy-stubs",
 ]
 dev = [
-    # Docs
-    "sphinx >= 8.0",
-    "sphinx_rtd_theme >= 3.0",
-    # Scipy
-    "scipy >= 1.14.0",
-    # Tests and linting
-    "pytest >= 8.3",
-    "ruff >= 0.9",
-    "deptry >= 0.23.0",
-    # Type Checking
-    "mypy ~= 1.15",
-    "scipy-stubs",
+  # Docs
+  "sphinx >= 8.0",
+  "sphinx_rtd_theme >= 3.0",
+  # Scipy
+  "scipy >= 1.14.0",
+  # Tests and linting
+  "pytest >= 8.3",
+  "ruff >= 0.9",
+  "deptry >= 0.23.0",
+  "pytest-cov >= 6.2.0",
+  # Type Checking
+  "mypy ~= 1.15",
+  "scipy-stubs",
 ]
 
 
 [tool.deptry]
 extend_exclude = [ # Patterns are regular expressions
-    "doc/",
+  "doc/",
 ]
 
 [tool.deptry.per_rule_ignores]
 DEP002 = [
-    'deptry',
-    'mypy',
-    'pytest',
-    'ruff',
-    'scipy',
-    'scipy-stubs',
-    'sphinx',
-    'sphinx_rtd_theme',
+  'deptry',
+  'mypy',
+  'pytest',
+  'pytest-cov',
+  'ruff',
+  'scipy',
+  'scipy-stubs',
+  'sphinx',
+  'sphinx_rtd_theme',
 ]
 
 
@@ -71,92 +78,99 @@ DEP002 = [
 line-length = 120
 target-version = "py311"
 exclude = [
-    "examples/*", # Patterns are glob expressions
+  "examples/*", # Patterns are glob expressions
 ]
 lint.select = ["ALL"]
 lint.ignore = [
-    "FBT",     # Boolean traps
-    "PLR2004", # constant value
-    "T201",    # Allow print
-    "TD002",   # No author on TODO
-    "TD003",   # No ticket on TODO
-    "FIX",     # All fixme types (aka, you can have TODOs and FIXMEs in your code.
-    # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
-    "COM812", # missing-trailing-comma
-    "ISC001", # single-line-implicit-string-concatenation
+  "FBT",     # Boolean traps
+  "PLR2004", # constant value
+  "T201",    # Allow print
+  "TD002",   # No author on TODO
+  "TD003",   # No ticket on TODO
+  "FIX",     # All fixme types (aka, you can have TODOs and FIXMEs in your code.
+  # https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+  "COM812", # missing-trailing-comma
+  "ISC001", # single-line-implicit-string-concatenation
 ]
 
 lint.unfixable = [
-    "B007",    # Don't modify unused loop control variable
-    "F401",    # Don't delete unused imports
-    "F841",    # Don't delete unused variables
-    "ERA001",  # Don't delete commented out code
-    "PERF102", # Don't auto-convert .items() to .values()
+  "B007",    # Don't modify unused loop control variable
+  "F401",    # Don't delete unused imports
+  "F841",    # Don't delete unused variables
+  "ERA001",  # Don't delete commented out code
+  "PERF102", # Don't auto-convert .items() to .values()
 ]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "tests/**/*.py" = [
-    "ANN201", # Allow no return types in tests.
-    "S101",   # Allow asserts in tests.
-    "D100",   # Don't require docstring in test modules
-    "D103",   # Don't require docstring in test functions
-    "D104",   # Don't require docstrings in test packages.
-    "ANN001", # Allow no function argument type annotations
-    "INP001", # Do not require __init__.py module
-    "PLC0415",# Allow module import during test runs
+  "ANN201",  # Allow no return types in tests.
+  "S101",    # Allow asserts in tests.
+  "D100",    # Don't require docstring in test modules
+  "D103",    # Don't require docstring in test functions
+  "D104",    # Don't require docstrings in test packages.
+  "ANN001",  # Allow no function argument type annotations
+  "INP001",  # Do not require __init__.py module
+  "PLC0415", # Allow module import during test runs
 ]
 "doc/source/conf.py" = [
-    "D100",   # Don't require docstring in test modules
-    "INP001", # Do not require __init__.py module
+  "D100",   # Don't require docstring in test modules
+  "INP001", # Do not require __init__.py module
 ]
 "hdf5storage/__init__.py" = [
-    "ANN401",  # Numerous instances where we need to annotate *args or **keywords with Any
+  "ANN401", # Numerous instances where we need to annotate *args or **keywords with Any
 ]
 "hdf5storage/marshallers.py" = [
-    "D101",    # Don't require docstrings in public classes
-    "D102",    # Don't require docstrings in public methods
-    "PLR0912", # Too many branches
-    "PLR0913", # Too many arguments to function
-    "PLR0915", # Too many statements
-    "C901",    # Too complex
+  "D101",    # Don't require docstrings in public classes
+  "D102",    # Don't require docstrings in public methods
+  "PLR0912", # Too many branches
+  "PLR0913", # Too many arguments to function
+  "PLR0915", # Too many statements
+  "C901",    # Too complex
 ]
 "tests/asserts.py" = [
-    "PLR0912", # Too many branches
-    "PLR0915", # Too many statements
-    "C901",    # Too complex
+  "PLR0912", # Too many branches
+  "PLR0915", # Too many statements
+  "C901",    # Too complex
 ]
 "tests/make_randoms.py" = [
-    "S311", # PRNG not suitable for cryptographic purposes
+  "S311", # PRNG not suitable for cryptographic purposes
 ]
 "tests/test_empty_matrix_matlab_metadata.py" = [
-    "S311", # PRNG not suitable for cryptographic purposes
+  "S311", # PRNG not suitable for cryptographic purposes
 ]
 "tests/test_hdf5_filters.py" = [
-    "S311", # PRNG not suitable for cryptographic purposes
+  "S311", # PRNG not suitable for cryptographic purposes
 ]
 "tests/test_marshaller_collection_priority.py" = [
-    "SLF001", # Access private member
-    "S311",   # PRNG not suitable for cryptographic purposes
+  "SLF001", # Access private member
+  "S311",   # PRNG not suitable for cryptographic purposes
 ]
 "tests/test_marshallers_requiring_modules.py" = [
-    "ARG002", # Unused method argument
-    "D101",   # Don't require docstrings in public classes
-    "D102",   # Don't require docstrings in public methods
-    "SLF001", # Access private member
+  "ARG002", # Unused method argument
+  "D101",   # Don't require docstrings in public classes
+  "D102",   # Don't require docstrings in public methods
+  "SLF001", # Access private member
 ]
 "tests/test_matlab_compatibility.py" = [
-    "S603", # Check for untrusted input to subprocess.call
-    "S607", # Partial executable path
+  "S603", # Check for untrusted input to subprocess.call
+  "S607", # Partial executable path
 ]
 "tests/test_multi_io.py" = [
-    "S311", # PRNG not suitable for cryptographic purposes
+  "S311", # PRNG not suitable for cryptographic purposes
 ]
 "tests/test_path_escaping.py" = [
-    "S311", # PRNG not suitable for cryptographic purposes
+  "S311", # PRNG not suitable for cryptographic purposes
 ]
 
 [tool.ruff.lint.pydocstyle]
 convention = "numpy" # Accepts: "google", "numpy", or "pep257".
+
+[tool.pytest.ini_options]
+addopts = "--cov=hdf5storage --cov-config=pyproject.toml"
+junit_family = "legacy"
+
+[tool.coverage.run]
+branch = true
 
 [[tool.mypy.overrides]]
 module = ["h5py"]
