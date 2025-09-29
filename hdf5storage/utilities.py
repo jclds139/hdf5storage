@@ -1125,7 +1125,7 @@ def convert_to_numpy_bytes(  # noqa: C901, PLR0911, PLR0912
             # then decode to str first, if they are uint32, put them as an
             # input buffer for an ndarray of type 'U').
             data = data.ravel()
-            for i in range(new_data.shape[0]):
+            for i in range(new_data.shape[0]):  # type: ignore [misc]
                 chunk = data[(i * length2) : ((i + 1) * length2)]
                 new_data[i] = np.bytes_(convert_to_str(chunk).encode("UTF-8"))
 
