@@ -99,7 +99,7 @@ jobs:
         python -m pip install '.[scipy,tests]'
     - name: Test with pytest
       run: |
-        pytest tests --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+        pytest tests --cov-report=xml --junitxml=junit.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
@@ -140,7 +140,7 @@ jobs:
         python -m pip install '.[tests]'
     - name: Test with pytest
       run: |
-        pytest tests --cov-report=xml --junitxml=junit.xml -o junit_family=legacy
+        pytest tests --cov-report=xml --junitxml=junit.xml
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v5
       with:
