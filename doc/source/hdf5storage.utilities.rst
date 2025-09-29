@@ -107,5 +107,3 @@ set_attributes_all
 ------------------
 
 .. autofunction:: set_attributes_all
-
-

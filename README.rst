@@ -1,3 +1,13 @@
+|lint-badge| |pre-commit-badge|
+
+.. |pre-commit-badge| image:: https://results.pre-commit.ci/badge/github/jclds139/hdf5storage/main.svg
+   :target: https://results.pre-commit.ci/latest/github/jclds139/hdf5storage/main
+   :alt: pre-commit.ci status
+
+.. |lint-badge| image:: https://github.com/jclds139/hdf5storage/actions/workflows/unit_tests.yml/badge.svg
+   :target: https://github.com/jclds139/hdf5storage/actions/workflows/unit_tests.yml
+   :alt: Unit tests and lint checks
+
 Overview
 ========
 
@@ -87,6 +97,7 @@ The documentation additionally requires the following packages
 
 * `sphinx <https://pypi.org/project/sphinx>`_ >= 8.0
 * `sphinx_rtd_theme <https://pypi.org/project/sphinx-rtd-theme>`_ >= 3.0
+* `sphinx_rtd_dark_mode <https://pypi.org/project/sphinx-rtd-dark-mode>`_ >= 1.3
 
 The documentation dependencies can be installed by ::
 
@@ -100,7 +111,7 @@ To build the HTML documentation, run either ::
 Development
 ===========
 
-All Python code is formatted using `ruff <https://pypi.org/project/ruff>`_.
+All Python code is formatted using `ruff format <https://docs.astral.sh/ruff/formatter/>`_.
 Releases and Pull Requests should pass all unit tests, and ideally pass type
 checking and have no warnings found by linting.
 
@@ -120,7 +131,7 @@ Linting
 
 This package has the configuration in ``pyproject.toml`` for linting with
 
-* `ruff`_
+* `ruff <https://pypi.org/project/ruff>`_
 
 To lint with `ruff`_, run ::
 
