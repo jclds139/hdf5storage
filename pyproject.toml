@@ -34,6 +34,10 @@ tests = [
   "deptry >= 0.23.0",
   "pytest-cov >= 6.2.0",
 ]
+typechecking = [
+  "mypy ~= 1.15", # pin mypy to a minor version for consistency
+  "scipy-stubs",
+]
 dev = [
   # Docs
   "sphinx >= 8.0",
@@ -44,6 +48,10 @@ dev = [
   "pytest >= 8.3",
   "ruff >= 0.9",
   "deptry >= 0.23.0",
+  "pytest-cov >= 6.2.0",
+  # Type Checking
+  "mypy ~= 1.15",
+  "scipy-stubs",
 ]
 
 
@@ -59,6 +67,7 @@ DEP002 = [
   'pytest-cov',
   'ruff',
   'scipy',
+  'scipy-stubs',
   'sphinx',
   'sphinx_rtd_theme',
 ]
@@ -161,6 +170,10 @@ junit_family = "legacy"
 
 [tool.coverage.run]
 branch = true
+
+[[tool.mypy.overrides]]
+module = ["h5py"]
+ignore_missing_imports = true
 
 [build-system]
 requires = ["poetry-core"]
