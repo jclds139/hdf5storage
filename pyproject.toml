@@ -166,11 +166,8 @@ lint.unfixable = [
 convention = "numpy" # Accepts: "google", "numpy", or "pep257".
 
 [tool.pytest.ini_options]
-addopts = "--cov=hdf5storage --cov-config=pyproject.toml"
+addopts = "--cov"
 junit_family = "legacy"
-
-[tool.coverage.run]
-branch = true
 
 [[tool.mypy.overrides]]
 module = ["h5py"]
