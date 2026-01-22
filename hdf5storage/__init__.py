@@ -2435,6 +2435,7 @@ def savemat(  # noqa: PLR0913
     marshaller_collection: MarshallerCollection | None = None,
     truncate_existing: bool = False,
     truncate_invalid_matlab: bool = False,
+    options: Options | None = None,
     **keywords: Any,
 ) -> None:
     """Save a dictionary of python objects to a MATLAB MAT file.
@@ -2486,6 +2487,12 @@ def savemat(  # noqa: PLR0913
         Whether to truncate a file if the file doesn't have the proper
         header (userblock in HDF5 terms) setup for MATLAB metadata to be
         placed.
+    options: Options or None, optional
+        The options to use when reading and/or writing, or ``None`` to
+        use the default. If passed, it overrides the 'store_python_metadata',
+        'oned_as', 'action_for_matlab_incompatible' and
+        `marshaller_collection` argument. Only applicable if not dispatching
+        to SciPy (version 7.3 and newer files).
     **keywords : dict, optional
         Additional keywords arguments to be passed onto
         ``scipy.io.savemat`` if dispatching to SciPy (`format` < 7.3).
@@ -2539,14 +2546,15 @@ def savemat(  # noqa: PLR0913
         elif isinstance(file_name, Path) and file_name.suffix != ".mat":
             file_name = file_name.parent / (file_name.stem + ".mat")
 
+
+    if options is None:
+        options = Options(store_python_metadata=store_python_metadata,
+                          oned_as=oned_as,
+                          action_for_matlab_incompatible=action_for_matlab_incompatible,
+                          marshaller_collection=marshaller_collection)
+
     # Make the options with matlab compatibility forced.
-    options = Options(
-        store_python_metadata=store_python_metadata,
-        matlab_compatible=True,
-        oned_as=oned_as,
-        action_for_matlab_incompatible=action_for_matlab_incompatible,
-        marshaller_collection=marshaller_collection,
-    )
+    options.matlab_compatible = True
 
     # Write the variables in the dictionary to file.
     writes(
