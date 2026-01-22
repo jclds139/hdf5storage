@@ -2546,12 +2546,13 @@ def savemat(  # noqa: PLR0913
         elif isinstance(file_name, Path) and file_name.suffix != ".mat":
             file_name = file_name.parent / (file_name.stem + ".mat")
 
-
     if options is None:
-        options = Options(store_python_metadata=store_python_metadata,
-                          oned_as=oned_as,
-                          action_for_matlab_incompatible=action_for_matlab_incompatible,
-                          marshaller_collection=marshaller_collection)
+        options = Options(
+            store_python_metadata=store_python_metadata,
+            oned_as=oned_as,
+            action_for_matlab_incompatible=action_for_matlab_incompatible,
+            marshaller_collection=marshaller_collection,
+        )
 
     # Make the options with matlab compatibility forced.
     options.matlab_compatible = True
