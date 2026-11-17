@@ -1381,6 +1381,8 @@ def set_attributes_all(
                 try:
                     if val.dtype == existing[k].dtype and val.shape == existing[k].shape:
                         attrs.modify(k, val)
+                    else:
+                        attrs.create(k, val)
                 except:  # noqa: E722
                     attrs.create(k, val)
     # Discard all other attributes.
