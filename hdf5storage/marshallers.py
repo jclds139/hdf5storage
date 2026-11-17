@@ -1360,6 +1360,11 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
             # it originally represented an array of strings (turned into
             # uints of some sort). The length in bits is contained in
             # the dtype name, which is the underlying_type.
+            if underlying_type.startswith(("bytes", "str")) and len(shape) < 2 and data.ndim == 2:
+                # A scalar or 1-D string's code units may have been
+                # promoted to a column vector by make_atleast_2d.
+                # Restore their sequence before decoding along the last axis.
+                data = data.reshape(-1)
             if underlying_type.startswith("bytes"):
                 if underlying_type == "bytes":
                     data = np.bytes_(b"")
