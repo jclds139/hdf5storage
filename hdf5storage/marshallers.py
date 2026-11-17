@@ -770,7 +770,8 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
                 or (type(data_to_store) == np.str_ and len(data_to_store) != len(new_data2))  # noqa: E721
                 or (
                     isinstance(data_to_store, np.ndarray)
-                    and new_data2.shape[-1] != data_to_store.shape[-1] * (data_to_store.dtype.itemsize // 4)
+                    and new_data2.shape[-1]
+                    != np.atleast_1d(data_to_store).shape[-1] * (data_to_store.dtype.itemsize // 4)
                 )
             ):
                 data_to_store = convert_numpy_str_to_uint32(data_to_store)
@@ -1372,10 +1373,12 @@ class NumpyScalarArrayMarshaller(TypeMarshaller):
                 if underlying_type == "str":
                     data = np.str_("")
                 elif underlying_type.startswith("str"):
+                    nchars = int(underlying_type[3:]) // 32
+                    # Decoding can trim Unicode padding; preserve the stored dtype.
                     data = convert_to_numpy_str(
                         data,
-                        length=int(underlying_type[3:]) // 32,
-                    )
+                        length=nchars,
+                    ).astype("U" + str(nchars), copy=False)
                 else:
                     data = convert_to_numpy_str(data)
 
